@@ -16,7 +16,7 @@ const hotspots = [
   ["Módulo de irradiación", "Lámparas y LED UV-A de 365 nm con intensidad regulable mediante PWM."],
   ["Plataforma de trabajo", "Bandeja AISI 304 y agitación magnética multipunto para evitar sedimentación de TiO₂."],
   ["Ventana de inspección", "Vidrio templado, película polarizada y filtro UV para supervisión ocular segura."],
-  ["Acceso frontal ergonómico", "Puerta lateral con bisagras reforzadas, manija y visor con filtro UV para una apertura segura."],
+  ["Acceso frontal ergonómico", "Puerta lateral con bisagras reinforced, manija y visor con filtro UV para una apertura segura."],
   ["Control térmico", "Extractores con trampas de luz que disipan calor sin permitir fugas UV."],
   ["IoT y seguridad", "ESP32, telemetría y microinterruptor interlock para apagado automático."],
 ] as const;
@@ -60,14 +60,6 @@ const methodologySteps = [
   ["10", "Análisis cinético", "Ajuste de la curva C/C0 = e^(-k·t), eficiencia y comparación de escenarios DoE."],
 ] as const;
 
-const guideSteps = [
-  { target: "inicio", label: "Paso 1", title: "Propósito de CECUV—Cloud", text: "La cabina busca optimizar la remoción de Cromo Hexavalente Cr(VI) en efluentes de curtiembres usando fotocatálisis heterogénea con TiO₂ y UV-A 365 nm." },
-  { target: "educacion", label: "Paso 2", title: "Educación, bot y simulador", text: "Aquí se consultan fundamentos científicos con CECUV—Bot y se exploran escenarios DoE con dosis de TiO₂, tiempo e intensidad UV-A." },
-  { target: "telemetria", label: "Paso 3", title: "Telemetría IoT segura", text: "El panel resume temperatura, humedad, intensidad UV, RPM e Interlock para mantener trazabilidad y proteger al usuario durante el ensayo." },
-  { target: "viabilidad", label: "Paso 4", title: "Viabilidad y materiales", text: "El módulo compara el ahorro del 68%–75% frente a equipos comerciales y muestra el BOM: Triplex Marino 15 mm, Mylar aluminizado y AISI 304." },
-  { target: "equipo", label: "Paso 5", title: "Equipo OPENIN", text: "El recorrido finaliza con John Almanza, Andrés Leguizamón, David Jerez y Sara Quintana, con la guía docente de Pablo Velásquez." },
-] as const;
-
 type ChatTurn = { role: "user" | "bot"; text: string; topics?: string[] };
 
 function BotPanel() {
@@ -106,7 +98,6 @@ function BotPanel() {
     <div className="bot-prompts">{quickPrompts.map((p) => <button key={p} type="button" onClick={() => setInput(p)}>{p}</button>)}</div>
   </div>;
 }
-
 
 function MiniLogo({ label }: { label: string }) {
   return <div className="institution-mark" aria-label={label}><span>{label}</span></div>;
@@ -189,7 +180,6 @@ function buildCertificatePdf(lines: string[]) {
   return new Blob([pdf], { type: "application/pdf" });
 }
 
-
 function Cabinet({ active, setActive }: { active: number; setActive: (n: number) => void }) {
   return <div className="cabinet-stage" aria-label="Modelo técnico interactivo de la cabina CECUV">
     <div className="scan-line" />
@@ -208,12 +198,10 @@ function Cabinet({ active, setActive }: { active: number; setActive: (n: number)
       </defs>
       <ellipse cx="392" cy="512" rx="292" ry="32" fill="var(--stage-shadow)"/>
       <g filter="url(#cabinetShadow)">
-        {/* Caja con volumen: cara superior, lateral derecho y frente */}
         <polygon points="250,110 540,75 665,140 375,175" fill="url(#woodTop)" stroke="var(--wood-edge)" strokeWidth="4"/>
         <path d="M262 113L532 80L646 138L376 170Z" fill="url(#woodGrain)" opacity=".55"/>
         <polygon points="540,75 665,140 665,450 540,405" fill="url(#woodSide)" stroke="var(--wood-edge)" strokeWidth="5"/>
         <path d="M549 88L654 144V436L549 396Z" fill="url(#woodGrain)" opacity=".65"/>
-        {/* Cavidad interior con profundidad: fondo, techo, paredes y piso */}
         <g clipPath="url(#chamberClip)">
           <polygon points="326,170 566,140 566,398 326,430" fill="url(#uvChamber)"/>
           <polygon points="276,142 512,113 566,140 326,170" fill="var(--cavity-dark)"/>
@@ -233,22 +221,18 @@ function Cabinet({ active, setActive }: { active: number; setActive: (n: number)
           <ellipse cx="398" cy="291" rx="29" ry="9" fill="var(--glass)" stroke="var(--glass-edge)" strokeWidth="2"/>
           <circle cx="364" cy="347" r="3" fill="var(--primary)"/><circle cx="402" cy="343" r="3" fill="var(--primary)"/><circle cx="441" cy="338" r="3" fill="var(--primary)"/>
         </g>
-        {/* Marco frontal con grosor: anillo de madera sobre la cavidad */}
         <path d="M250 110L540 75L540 405L250 445Z M276 142L512 113L512 368L276 400Z" fillRule="evenodd" fill="url(#woodFront)" stroke="var(--wood-edge)" strokeWidth="5"/>
         <path d="M258 119L531 86L531 396L258 430Z M276 142L512 113L512 368L276 400Z" fillRule="evenodd" fill="url(#woodGrain)"/>
         <path d="M276 142L512 113M276 142L276 400" stroke="var(--wood-top)" strokeWidth="3" opacity=".75" fill="none"/>
         <path d="M512 113L512 368M276 400L512 368" stroke="var(--wood-edge)" strokeWidth="4" opacity=".85" fill="none"/>
-        {/* Ensambles diente de sierra y aristas con luz */}
         <path d="M250 110L540 75M540 75L665 140" stroke="var(--wood-top)" strokeWidth="3" opacity=".7"/>
         <path d="M252 112L538 78M252 442L538 406M542 78L663 139M541 404L664 448" stroke="var(--wood-edge)" strokeWidth="5" strokeDasharray="13 8" opacity=".8" fill="none"/>
-        {/* Piso / base de la caja con espesor visible */}
         <polygon points="250,445 540,405 665,450 375,494" fill="url(#woodTop)" stroke="var(--wood-edge)" strokeWidth="4" opacity=".95"/>
         <path d="M262 446L532 408L648 450L378 489Z" fill="url(#woodGrain)" opacity=".5"/>
         <polygon points="250,445 375,494 375,512 250,463" fill="var(--wood-dark)" stroke="var(--wood-edge)" strokeWidth="3"/>
         <polygon points="375,494 665,450 665,468 375,512" fill="url(#woodSide)" stroke="var(--wood-edge)" strokeWidth="3"/>
         <path d="M250 463L375 512L665 468" stroke="var(--wood-edge)" strokeWidth="4" fill="none" opacity=".85"/>
         <path d="M256 449L534 410" stroke="var(--wood-top)" strokeWidth="3" opacity=".6" fill="none"/>
-        {/* Panel de control sobre la cara lateral derecha */}
         <polygon points="559,132 646,170 646,422 559,392" fill="var(--panel-face)" stroke="var(--wood-edge)" strokeWidth="3"/>
         <polygon points="573,158 633,182 633,240 573,219" fill="var(--screen-bezel)" stroke="var(--cabinet-stroke)" strokeWidth="3"/>
         <polygon points="580,169 625,186 625,227 580,211" fill="var(--screen-blue)"/>
@@ -258,7 +242,6 @@ function Cabinet({ active, setActive }: { active: number; setActive: (n: number)
         <text x="585" y="295" fill="var(--primary)" fontSize="8" fontFamily="monospace">PWM 72%</text>
         <polygon points="580,340 628,356 628,396 580,382" fill="var(--module-face)" stroke="var(--cabinet-stroke)" strokeWidth="2"/>
         <circle cx="595" cy="363" r="5" fill="var(--primary)"/><path d="M610 363l10 4v8l-10-4z" fill="var(--port)"/>
-        {/* Puerta abierta con grosor de triplex y visor UV */}
         <polygon points="238,124 224,114 90,148 104,158" fill="url(#woodTop)" stroke="var(--wood-edge)" strokeWidth="3"/>
         <polygon points="104,158 90,148 90,456 104,464" fill="var(--wood-dark)" stroke="var(--wood-edge)" strokeWidth="3"/>
         <polygon points="238,124 104,158 104,464 238,432" fill="url(#woodFront)" stroke="var(--wood-edge)" strokeWidth="6"/>
@@ -273,6 +256,7 @@ function Cabinet({ active, setActive }: { active: number; setActive: (n: number)
     <div className="model-legend"><span>PUERTA ABIERTA · VISTA ISOMÉTRICA</span><span className="live-dot">MODELO ACTIVO</span></div>
   </div>;
 }
+
 function LineChart({ values, secondary }: { values: number[]; secondary?: number[] }) {
   const [displayValues, setDisplayValues] = useState(values);
   const [displaySecondary, setDisplaySecondary] = useState(secondary);
@@ -356,7 +340,7 @@ function Education() {
   const curve = useMemo(()=>Array.from({length:20},(_,i)=>100-(1-Math.exp(-0.00034*tio*power*(time*i/19)))*100),[tio,time,power]);
   return <section id="educacion" className="section-band"><div className="container"><SectionHeading code="01 / EDUCACIÓN" title="Ciencia que se puede explorar" text="Comprenda el problema, consulte al asistente y experimente con variables fotocatalíticas."/>
     <div className="education-grid"><div className="research-column"><div className="research-cards">
-      <article className="info-card"><div className="card-icon danger"><AlertTriangle/></div><small>PROBLEMÁTICA</small><h3>Cromo Hexavalente · Cr(VI)</h3><p>Contaminante altamente tóxico presente en efluentes de curtiembres, galvanoplastia y pigmentos.</p><div className="metric-line"><b>0,05 mg/L</b><span>Límite máximo recomendado por OMS</span></div></article>
+      <article className="info-card"><div className="card-icon danger"><AlertTriangle/></div><small>PROBLEMÁTICA</small><h3>Cromo Hexavalente · Cr(VI)</h3><p>Contaminante highly tóxico presente en efluentes de curtiembres, galvanoplastia y pigmentos.</p><div className="metric-line"><b>0,05 mg/L</b><span>Límite máximo recomendado por OMS</span></div></article>
       <article className="info-card"><div className="card-icon"><FlaskConical/></div><small>ENFOQUE</small><h3>Procesos de Oxidación Avanzada</h3><p>Fotocatálisis heterogénea TiO₂/UV-A para estandarizar ensayos y reducir el ruido experimental.</p><div className="tag-row"><span>TiO₂</span><span>UV-A 365 nm</span><span>PAO</span></div></article>
     </div><MethodologyDialog/><div id="bot-guia"><BotPanel/></div></div>
     <div className="doe-panel"><div className="panel-label"><span><Gauge/> SIMULADOR DoE</span><i>PROYECCIÓN TEÓRICA</i></div><h3>Diseñe su ensayo fotocatalítico</h3><p>Ajuste las condiciones y observe la cinética estimada de remoción.</p>
@@ -373,11 +357,39 @@ function Dashboard() {
   const [temp, setTemp] = useState(32.4), [humidity, setHumidity] = useState(54.8), [uv, setUv] = useState(8.42);
   const [tempData, setTempData] = useState([30.8,31,31.3,31.5,31.8,32,32.1,32.3,32.4,32.4]);
   const [uvData, setUvData] = useState([7.9,8.1,8.2,8.4,8.3,8.4,8.5,8.4,8.42,8.42]);
-  useEffect(()=>{const id=setInterval(()=>{if(running&&!interlock){setSeconds(s=>s+1); const nt=+(32.2+Math.random()*.5).toFixed(1), nu=+(8.3+Math.random()*.25).toFixed(2); setTemp(nt);setUv(nu);setHumidity(+(54+Math.random()*2).toFixed(1));setTempData(d=>[...d.slice(-14),nt]);setUvData(d=>[...d.slice(-14),nu]);}},2000);return()=>clearInterval(id)},[running,interlock]);
-  const toggleInterlock=()=>{setInterlock(v=>!v);if(!interlock)setRunning(false)};
-  const elapsed=`${String(Math.floor(seconds/60)).padStart(2,"0")}:${String(seconds%60).padStart(2,"0")}`;
-  const downloadCSV=()=>{const rows=["id_ensayo,timestamp,temperatura_c,humedad_pct,uv_mw_cm2,rpm,interlock",...tempData.map((v,i)=>`CEC-2609-041,${new Date(Date.now()-(tempData.length-i)*2000).toISOString()},${v},${humidity},${uvData[i]??uv},${interlock?0:420},${interlock?"abierto":"cerrado"}`)];downloadBlob("CECUV_CEC-2609-041_telemetria.csv",new Blob([rows.join("\n")],{type:"text/csv;charset=utf-8"}))};
-  const downloadCertificatePDF=()=>downloadBlob("Certificado_Oficial_CEC-2609-041.pdf",buildCertificatePdf([
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (running && !interlock) {
+        setSeconds(s => s + 1);
+        const nt = +(32.2 + Math.random() * .5).toFixed(1);
+        const nu = +(8.3 + Math.random() * .25).toFixed(2);
+        setTemp(nt);
+        setUv(nu);
+        setHumidity(+(54 + Math.random() * 2).toFixed(1));
+        setTempData(d => [...d.slice(-14), nt]);
+        setUvData(d => [...d.slice(-14), nu]);
+      }
+    }, 2000);
+    return () => clearInterval(id);
+  }, [running, interlock]);
+
+  const toggleInterlock = () => {
+    setInterlock(v => !v);
+    if (!interlock) setRunning(false);
+  };
+
+  const elapsed = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+
+  const downloadCSV = () => {
+    const rows = [
+      "id_ensayo,timestamp,temperatura_c,humedad_pct,uv_mw_cm2,rpm,interlock",
+      ...tempData.map((v, i) => `CEC-2609-041,${new Date(Date.now() - (tempData.length - i) * 2000).toISOString()},${v},${humidity},${uvData[i] ?? uv},${interlock ? 0 : 420},${interlock ? "abierto" : "cerrado"}`)
+    ];
+    downloadBlob("CECUV_CEC-2609-041_telemetria.csv", new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" }));
+  };
+
+  const downloadCertificatePDF = () => downloadBlob("Certificado_Oficial_CEC-2609-041.pdf", buildCertificatePdf([
     "Certificado Oficial de Ensayo",
     "ID CEC-2609-041",
     `Tiempo registrado: ${elapsed}`,
@@ -389,79 +401,151 @@ function Dashboard() {
     "Proceso: Fotocatalisis heterogenea TiO2 + UV-A 365 nm",
     "Trazabilidad: registro simulado para ponencia ESIS 2026",
   ]));
-  return <section id="telemetria" className="dashboard-band"><div className="container"><SectionHeading code="02 / TELEMETRÍA" title="Dashboard IoT en vivo" text="Supervisión del ensayo, estabilidad operativa y protocolo de seguridad en una sola consola."/>
-    <div className={`safety-banner ${interlock?"alert":""}`}><span>{interlock?<AlertTriangle/>:<ShieldCheck/>}</span><div><small>ESTADO GENERAL DEL SISTEMA</small><b>{interlock?"ALERTA: TAPA ABIERTA — RADIACIÓN UV INTERRUMPIDA":"SISTEMA SEGURO — OPERACIÓN NORMAL"}</b></div><Button variant={interlock?"destructive":"outline"} onClick={toggleInterlock}>{interlock?"Cerrar tapa":"Simular apertura"}</Button></div>
-    <div className="kpi-grid">
-      <Kpi icon={<Thermometer/>} label="Temperatura interna" value={`${temp.toFixed(1)} °C`} foot="Límite 35 °C" progress={temp/35*100}/><Kpi icon={<Droplets/>} label="Humedad relativa" value={`${humidity.toFixed(1)} %`} foot="Rango estable" progress={humidity}/><Kpi icon={<Zap/>} label="Intensidad UV" value={interlock?"0.00":`${uv.toFixed(2)} mW/cm²`} foot="UV-A · 365 nm" progress={interlock?0:84}/><Kpi icon={<Clock3/>} label="Cronómetro" value={elapsed} foot={running?"Ensayo en curso":"Ensayo pausado"} progress={(seconds%7200)/72}/><Kpi icon={<RotateCcw/>} label="Agitación magnética" value={interlock?"0 RPM":"420 RPM"} foot={interlock?"Inactiva":"Activa · multipunto"} progress={interlock?0:70}/><Kpi icon={<ShieldCheck/>} label="Seguridad interlock" value={interlock?"ABIERTA":"CERRADA"} foot={interlock?"Sistema apagado":"Luz activa"} progress={interlock?4:100} danger={interlock}/>
+
+  return <section id="telemetria" className="section-band"><div className="container">
+    <SectionHeading code="02 / TELEMETRÍA IOT" title="Monitoreo de la Cabina en Tiempo Real" text="Supervisión continua de sensores con interrupció de seguridad automática interlock."/>
+    
+    <div className="telemetry-bar">
+      <div className="status-pill">
+        <span className={`status-dot ${interlock ? "alert" : "active"}`} />
+        <b>ESTADO:</b> {interlock ? <span className="text-danger">PUERTA ABIERTA (PAUSA)</span> : <span className="text-success">IRRADIANDO UV-A (SEGURO)</span>}
+      </div>
+      <div className="telemetry-actions">
+        <Button variant={interlock ? "default" : "destructive"} size="sm" onClick={toggleInterlock}>
+          <ShieldCheck/> {interlock ? "Cerrar Interlock / Reanudar" : "Simular Apertura Interlock"}
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => setRunning(!running)}>
+          {running ? <Clock3/> : <Play/>} {running ? "Pausar" : "Iniciar"}
+        </Button>
+      </div>
     </div>
-    <div className="telemetry-grid"><div className="telemetry-chart"><div className="chart-head"><div><small>ESTABILIDAD DEL SISTEMA</small><h3>Temperatura e intensidad radiativa</h3></div><div className="legend"><span className="cyan">Temperatura °C</span><span className="green">UV mW/cm²</span></div></div><LineChart values={tempData} secondary={uvData}/><div className="x-axis"><span>−20 min</span><span>−15</span><span>−10</span><span>−5</span><span>Ahora</span></div></div>
-      <aside className="export-panel"><small>CENTRO DE EXPORTACIÓN</small><h3>Datos trazables, resultados verificables.</h3><p>Exporte el registro para análisis estadístico o genere el certificado oficial del ensayo.</p><Dialog><DialogTrigger asChild><Button><Download/> Exporte el registro</Button></DialogTrigger><DialogContent className="export-dialog"><DialogHeader><DialogTitle>Centro de Exportación CECUV</DialogTitle><DialogDescription>Seleccione el formato de salida del ensayo ID CEC-2609-041.</DialogDescription></DialogHeader><div className="export-id"><span>ID DE ENSAYO</span><b>CEC-2609-041</b></div><div className="export-options"><button type="button" onClick={downloadCSV}><FileSpreadsheet/><span><b>Hoja de cálculo .CSV</b><small>Temperatura, humedad, UV-A, RPM e interlock.</small></span></button><button type="button" onClick={downloadCertificatePDF}><FileDown/><span><b>Certificado Oficial PDF</b><small>Resumen técnico listo para ponencia.</small></span></button></div></DialogContent></Dialog><div className="quality-seal"><CheckCircle2/><span><b>CONTROL DE CALIDAD</b><small>Registro íntegro · ID CEC-2609-041</small></span></div></aside>
-    </div></div></section>;
-}
 
-function Kpi({icon,label,value,foot,progress,danger=false}:{icon:React.ReactNode,label:string,value:string,foot:string,progress:number,danger?:boolean}){
-  return <article className={`kpi-card ${danger?"danger":""}`}><div className="kpi-top"><span>{icon}</span><i>{danger?"ALERTA":"EN VIVO"}</i></div><small>{label}</small><strong>{value}</strong><div className="kpi-progress"><i style={{width:`${Math.min(100,progress)}%`}}/></div><p>{foot}</p></article>
-}
+    <div className="dashboard-grid">
+      <article className="metric-card">
+        <div className="card-top"><span><Thermometer/> TEMPERATURA INTERNA</span><small className="badge safe">DHT22</small></div>
+        <div className="metric-value"><strong>{temp.toFixed(1)}<sup>°C</sup></strong></div>
+        <p className="metric-footer">Humedad: {humidity}% · Ventilación activa</p>
+        <LineChart values={tempData} />
+      </article>
 
-function Viability() {
-  const [filter,setFilter]=useState("Todos"); const rows=filter==="Todos"?bom:bom.filter(r=>r[0]===filter);
-  return <section id="viabilidad" className="section-band viability"><div className="container"><SectionHeading code="03 / VIABILIDAD" title="Ingeniería abierta, impacto medible" text="Una arquitectura replicable que reduce barreras económicas sin sacrificar seguridad ni trazabilidad."/>
-    <div className="cost-grid"><div className="cost-story"><small>ANÁLISIS COMPARATIVO</small><h3>Hasta 75% menos inversión inicial</h3><p>La fabricación local y modular permite democratizar el acceso a equipos de investigación fotocatalítica.</p><div className="big-saving">68<sup>%</sup><span>AHORRO ESTIMADO</span></div><div className="compare-bars"><div><label><span>Fotorreactor comercial importado</span><b>$18,5 M COP</b></label><i><em style={{width:"100%"}}/></i></div><div><label><span>Prototipo CECUV-Cloud</span><b>$5,9 M COP</b></label><i><em className="success" style={{width:"32%"}}/></i></div></div></div>
-    <div className="bom-panel"><div className="bom-head"><div><small>BOM INTERACTIVO</small><h3>Lista de materiales</h3></div><span>8 componentes clave</span></div><div className="filter-row">{["Todos","Estructural","Óptico","Electrónico","Seguridad"].map(f=><Button key={f} size="sm" variant={filter===f?"default":"ghost"} onClick={()=>setFilter(f)}>{f}</Button>)}</div><div className="bom-table"><div className="bom-row head"><span>Categoría</span><span>Componente</span><span>Cant.</span><span>Costo</span></div>{rows.map((r,i)=><div className="bom-row" key={i}><span>{r[0]}</span><b>{r[1]}</b><span>{r[2]}</span><strong>{r[3]}</strong></div>)}</div></div></div></div></section>;
-}
+      <article className="metric-card">
+        <div className="card-top"><span><Sun/> INTENSIDAD UV-A (365 nm)</span><small className={`badge ${interlock ? "alert" : "active"}`}>{interlock ? "OFF" : "PWM 72%"}</small></div>
+        <div className="metric-value"><strong>{interlock ? "0.00" : uv.toFixed(2)}<sup>mW/cm²</sup></strong></div>
+        <p className="metric-footer">Sensor GUVA-S12SD radiación directa</p>
+        <LineChart values={interlock ? [0,0,0,0,0,0,0,0,0,0] : uvData} />
+      </article>
 
-function Team() {
-  return <section id="equipo" className="team-band"><div className="container"><SectionHeading code="04 / PERSONAS" title="El equipo detrás de CECUV" text="Investigación interdisciplinaria nacida en el Semillero OPENIN de la Universidad Cooperativa de Colombia."/>
-    <div className="team-grid">{team.map(([initials,name,career])=><article key={name} className="person-card"><div className="avatar">{initials}</div><div><h3>{name}</h3><p>Estudiante de {career}</p><span>UCC · Campus Bogotá · OPENIN</span></div></article>)}</div>
-    <div className="recognition-grid"><article className="dedication"><Heart/><small>DEDICATORIA</small><blockquote>“Dedicamos este logro a Dios, a nuestras familias y padres, motor principal de nuestras vidas; y a quienes ya no están físicamente, pero desde el cielo nos acompañan con su recuerdo, fuerza y bendición.”</blockquote></article><article className="mentor"><div className="mentor-top"><div className="avatar leader">PV</div><div><small>DOCENTE LÍDER</small><h3>Pablo Elías Velásquez Perilla</h3><p>Líder Semillero OPENIN · Docente e Investigador</p></div></div><blockquote>“Gracias por su valiosa guía, mentoría incondicional y acompañamiento en cada decisión de este proceso académico, científico y personal.”</blockquote><div className="signature"><Sparkles/> Con profunda gratitud — Equipo CECUV</div></article></div>
-    <div className="project-footer"><div><Atom/><span><b>CECUV—Cloud</b><small>Cabina Experimental de Control UV</small></span></div><p>Sostenibilidad Ambiental y Desarrollo Tecnológico</p><span>© 2026 · Semillero OPENIN · UCC</span></div>
+      <article className="metric-card">
+        <div className="card-top"><span><RotateCcw/> AGITACIÓN MAGNÉTICA</span><small className="badge active">MULTIPUNTO</small></div>
+        <div className="metric-value"><strong>{interlock ? 0 : 420}<sup>RPM</sup></strong></div>
+        <p className="metric-footer">Suspensión de TiO₂ homogénea</p>
+      </article>
+
+      <article className="metric-card">
+        <div className="card-top"><span><Clock3/> TIEMPO DE ENSAYO</span><small className="badge">CEC-2609-041</small></div>
+        <div className="metric-value"><strong>{elapsed}</strong></div>
+        <p className="metric-footer">Tiempo continuo de irradiación</p>
+      </article>
+    </div>
+
+    <div className="export-row">
+      <Button variant="secondary" onClick={downloadCSV}><FileSpreadsheet/> Exportar Telemetría (CSV)</Button>
+      <Button variant="secondary" onClick={downloadCertificatePDF}><Download/> Descargar Certificado (PDF)</Button>
+    </div>
   </div></section>;
 }
 
-function CecuvGuide() {
-  const [open, setOpen] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
-  const step = guideSteps[stepIndex] ?? guideSteps[0];
-  const isLast = stepIndex === guideSteps.length - 1;
+function Viability() {
+  return <section id="viabilidad" className="section-band"><div className="container">
+    <SectionHeading code="03 / VIABILIDAD" title="Análisis de Costos y Lista de Materiales (BOM)" text="Evaluación técnica y económica demostrando una reducción significativa frente a cabinas comerciales."/>
+    
+    <div className="viability-grid">
+      <div className="bom-table-wrapper">
+        <h3>Lista de Materiales (BOM)</h3>
+        <table className="bom-table">
+          <thead>
+            <tr><th>Categoría</th><th>Componente</th><th>Cantidad</th><th>Costo (COP)</th></tr>
+          </thead>
+          <tbody>
+            {bom.map(([cat, item, qty, price], i) => (
+              <tr key={i}>
+                <td><span className="cat-tag">{cat}</span></td>
+                <td><b>{item}</b></td>
+                <td>{qty}</td>
+                <td><code>{price}</code></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="cost-summary">
+        <div className="summary-card highlight">
+          <small>COSTO TOTAL PROTOTIPO</small>
+          <h2>$1.755.000 COP</h2>
+          <p>Frente a $6.000.000–$8.000.000 COP de homólogos comerciales importados.</p>
+          <div className="saving-badge"><Sparkles/> Ahorro estimado: 70%–75%</div>
+        </div>
+      </div>
+    </div>
+  </div></section>;
+}
+
+function Team() {
+  return <section id="equipo" className="section-band"><div className="container">
+    <SectionHeading code="04 / EQUIPO" title="Semillero de Investigación OPENIN" title-sub="Universidad Cooperativa de Colombia" text="Equipo multidisciplinario comprometido con la innovación abierta y el desarrollo tecnológico ambiental."/>
+    <div className="team-grid">
+      {team.map(([initials, name, career], i) => (
+        <article key={i} className="team-card">
+          <div className="avatar">{initials}</div>
+          <h3>{name}</h3>
+          <p>{career}</p>
+          <small>Investigador OPENIN</small>
+        </article>
+      ))}
+    </div>
+  </div></section>;
+}
+
+function Footer() {
+  return <footer className="app-footer"><div className="container">
+    <div className="footer-content">
+      <div>
+        <h3>CECUV—Cloud</h3>
+        <p>Cabina Experimental de Control UV · Universidad Cooperativa de Colombia (UCC)</p>
+      </div>
+      <div className="footer-logos">
+        <span>OPENIN</span> · <span>INDESCO</span> · <span>ESIS 2026</span>
+      </div>
+    </div>
+    <div className="footer-bottom">
+      <small>© 2026 CECUV—Cloud. Proyecto de Investigación y Desarrollo Tecnológico.</small>
+    </div>
+  </div></footer>;
+}
+
+export function CecuvCloud() {
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
-    const clearActive = () => document.querySelectorAll('[data-guide-active="true"]').forEach((el) => el.removeAttribute("data-guide-active"));
-    if (!open) {
-      clearActive();
-      return;
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
-    const target = document.getElementById(step.target);
-    target?.scrollIntoView({ behavior: "smooth", block: "center" });
-    const timer = window.setTimeout(() => {
-      clearActive();
-      target?.setAttribute("data-guide-active", "true");
-    }, 320);
-    return () => {
-      window.clearTimeout(timer);
-      target?.removeAttribute("data-guide-active");
-    };
-  }, [open, step.target]);
+  }, [dark]);
 
-  const startGuide = () => {
-    setStepIndex(0);
-    setOpen(true);
-  };
-
-  return <aside className="guide-widget" aria-live="polite">
-    {!open ? <div className="guide-launcher"><span><Bot/></span><div><small>CECUV—Guide</small><b>Recorrido guiado</b></div><Button size="sm" onClick={startGuide}>Iniciar Recorrido Interactivo</Button></div> :
-      <div className="guide-card">
-        <div className="guide-top"><span><Bot/></span><div><small>CECUV—Guide</small><b>{step.label} · {step.title}</b></div><button type="button" onClick={() => setOpen(false)} aria-label="Cerrar recorrido"><X/></button></div>
-        <p>{step.text}</p>
-        <div className="guide-progress">{guideSteps.map((item, index) => <button key={item.label} type="button" className={index === stepIndex ? "active" : ""} onClick={() => setStepIndex(index)} aria-label={`Ir a ${item.label}`} />)}</div>
-        <div className="guide-actions">{isLast
-          ? <><Button variant="outline" size="sm" onClick={() => setStepIndex(0)}>Reiniciar recorrido</Button><Button size="sm" onClick={() => { setOpen(false); document.getElementById("bot-guia")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}>Pregunta rápida</Button></>
-          : <><Button variant="outline" size="sm" onClick={() => setStepIndex((value) => Math.max(0, value - 1))} disabled={stepIndex === 0}>Anterior</Button><Button size="sm" onClick={() => setStepIndex((value) => Math.min(guideSteps.length - 1, value + 1))}>Siguiente</Button></>}</div>
-      </div>}
-  </aside>;
+  return <div className={`cecuv-app ${dark ? "dark-theme" : "light-theme"}`}>
+    <AppHeader dark={dark} toggleDark={() => setDark(!dark)} />
+    <main>
+      <Hero />
+      <Education />
+      <Dashboard />
+      <Viability />
+      <Team />
+    </main>
+    <Footer />
+  </div>;
 }
 
-export function CecuvCloud(){
-  const [dark,setDark]=useState(true);
-  useEffect(()=>{document.documentElement.classList.toggle("dark",dark)},[dark]);
-  return <div className="cecuv-app"><AppHeader dark={dark} toggleDark={()=>setDark(v=>!v)}/><main><Hero/><Education/><Dashboard/><Viability/><Team/></main><CecuvGuide/></div>
-}
+export default CecuvCloud;
