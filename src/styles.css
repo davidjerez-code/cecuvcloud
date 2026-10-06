@@ -108,3 +108,24 @@
 
 [id="inicio"],[id="prototipo"],[id="educacion"],[id="telemetria"],[id="viabilidad"],[id="equipo"],[id="bot-guia"]{scroll-margin-top:96px}
 html{scroll-behavior:smooth}
+
+html{scroll-behavior:smooth}
+.cecuv-app{overflow-x:clip}
+#inicio,#prototipo,#educacion,#telemetria,#viabilidad,#equipo,#bot-guia{scroll-margin-top:96px}
+.guide-widget{position:fixed;right:20px;bottom:20px;z-index:60;max-width:calc(100vw - 40px)}
+.guide-launcher{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;background:var(--primary);color:var(--primary-foreground);font-weight:700;box-shadow:0 10px 30px -10px var(--primary);cursor:pointer}
+.guide-launcher svg{width:16px;height:16px}
+.guide-card{width:340px;max-width:100%;background:var(--card);color:var(--card-foreground);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:0 20px 50px -20px rgb(0 0 0 / .6);display:grid;gap:8px}
+.guide-top{display:flex;justify-content:space-between;align-items:center}
+.guide-top b{display:inline-flex;gap:6px;align-items:center}
+.guide-top svg{width:16px;height:16px}
+.guide-top button{cursor:pointer;opacity:.7}
+.guide-card small{font-family:"IBM Plex Mono",monospace;color:var(--muted-foreground)}
+.guide-card h4{font-weight:700}
+.guide-card p{font-size:.9rem;color:var(--muted-foreground);line-height:1.5}
+.guide-progress{height:4px;background:var(--muted);border-radius:4px;overflow:hidden}
+.guide-progress span{display:block;height:100%;background:var(--primary);transition:width .3s}
+.guide-actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.export-row{position:relative;z-index:2;margin-top:20px}
+.export-options{display:grid;gap:10px}
+.export-id{font-family:"IBM Plex Mono",monospace;color:var(--primary)}

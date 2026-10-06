@@ -449,8 +449,19 @@ function Dashboard() {
     </div>
 
     <div className="export-row">
-      <Button variant="secondary" onClick={downloadCSV}><FileSpreadsheet/> Exportar Telemetría (CSV)</Button>
-      <Button variant="secondary" onClick={downloadCertificatePDF}><Download/> Descargar Certificado (PDF)</Button>
+      <Dialog>
+        <DialogTrigger asChild><Button variant="secondary"><Download/> Exporte el registro</Button></DialogTrigger>
+        <DialogContent className="export-dialog">
+          <DialogHeader>
+            <DialogTitle>Centro de exportación</DialogTitle>
+            <DialogDescription>Ensayo <b className="export-id">CEC-2609-041</b> · seleccione el formato.</DialogDescription>
+          </DialogHeader>
+          <div className="export-options">
+            <Button variant="secondary" onClick={downloadCSV}><FileSpreadsheet/> Hoja de cálculo (.csv)</Button>
+            <Button onClick={downloadCertificatePDF}><Download/> Certificado Oficial (PDF)</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   </div></section>;
 }
@@ -545,6 +556,43 @@ export function CecuvCloud() {
       <Team />
     </main>
     <Footer />
+    <CecuvGuide />
+  </div>;
+}
+
+const guideSteps = [
+  ["inicio", "Introducción", "La cabina busca optimizar la remoción de Cromo Hexavalente Cr(VI) de efluentes de curtiembres mediante fotocatálisis heterogénea (TiO₂ + UV-A 365 nm)."],
+  ["educacion", "Educación y CECUV—Bot", "Escriba cualquier pregunta al CECUV—Bot y mueva los controles del Simulador DoE para ver la curva cinética en tiempo real."],
+  ["telemetria", "Telemetría IoT", "Monitoreo de temperatura, humedad, agitación magnética (RPM) y el protocolo de seguridad Interlock que apaga la radiación al abrir la puerta."],
+  ["viabilidad", "Viabilidad económica", "Ahorro del 68%–75% frente a equipos comerciales. BOM con Triplex Marino de 15 mm, Mylar aluminizado y acero AISI 304."],
+  ["equipo", "Equipo OPENIN", "John Almanza, Andrés Leguizamón, David Jerez y Sara Quintana, con el acompañamiento del docente Pablo Velásquez."],
+] as const;
+
+function CecuvGuide() {
+  const [open, setOpen] = useState(false);
+  const [step, setStep] = useState(0);
+  const go = (i: number) => {
+    setStep(i);
+    document.getElementById(guideSteps[i]![0])?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const s = guideSteps[step]!;
+  const last = step === guideSteps.length - 1;
+  return <div className="guide-widget">
+    {open ? <div className="guide-card" role="dialog" aria-label="CECUV—Guide">
+      <div className="guide-top"><b><Sparkles/> CECUV—Guide</b><button aria-label="Cerrar" onClick={() => setOpen(false)}><X/></button></div>
+      <small>PASO {step + 1} / {guideSteps.length}</small>
+      <div className="guide-progress"><span style={{ width: `${((step + 1) / guideSteps.length) * 100}%` }}/></div>
+      <h4>{s[1]}</h4><p>{s[2]}</p>
+      <div className="guide-actions">
+        {last ? <>
+          <Button variant="outline" size="sm" onClick={() => go(0)}><RotateCcw/> Reiniciar recorrido</Button>
+          <Button size="sm" onClick={() => { setOpen(false); document.getElementById("bot-guia")?.scrollIntoView({ behavior: "smooth" }); }}><Bot/> Pregunta rápida</Button>
+        </> : <>
+          <Button variant="outline" size="sm" disabled={step === 0} onClick={() => go(step - 1)}>Anterior</Button>
+          <Button size="sm" onClick={() => go(step + 1)}>Siguiente <ChevronRight/></Button>
+        </>}
+      </div>
+    </div> : <button className="guide-launcher" onClick={() => { setOpen(true); go(0); }}><Play/> Iniciar Recorrido Interactivo</button>}
   </div>;
 }
 
