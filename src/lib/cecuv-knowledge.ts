@@ -66,7 +66,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   {
     id: "electronica",
     topic: "Electrónica, sensores y data logging",
-    keywords: ["electronica", "arduino", "esp32", "microcontrolador", "sensor", "sensores", "iot", "telemetria", "datos", "logging", "adquisicion", "temperatura", "humedad", "cronometro", "temporizador", "monitoreo", "dashboard", "electrico", "fuente", "fusible", "cableado", "mqtt", "websockets"],
+    keywords: ["electronica", "arduino", "esp32", "dht22", "guva", "microcontrolador", "sensor", "sensores", "iot", "telemetria", "datos", "logging", "adquisicion", "temperatura", "humedad", "cronometro", "temporizador", "monitoreo", "dashboard", "electrico", "fuente", "fusible", "cableado", "mqtt", "websockets"],
     answer: "La CECUV integra un módulo de adquisición de datos (data logging) con microcontrolador ESP32/Arduino que registra y transmite vía IoT/MQTT en tiempo real la temperatura interna, la humedad relativa, la intensidad radiativa UV y el tiempo transcurrido, minimizando errores humanos en la toma de datos. Se complementa con sensores térmicos, ópticos y de ambiente. El sistema eléctrico incluye fuente de alimentación conmutada, interruptor principal, cableado industrial y portafusibles de protección.",
   },
   {
@@ -197,7 +197,7 @@ export function answerQuestion(question: string): BotReply {
     };
   }
 
-  const top = scored.slice(0, 2);
+  const top = scored.length > 1 && scored[1]!.score >= scored[0]!.score * 0.8 ? scored.slice(0, 2) : scored.slice(0, 1);
   const text = top.map((s) => s.entry.answer).join("\n\n");
   return { text, topics: top.map((s) => s.entry.topic) };
 }
