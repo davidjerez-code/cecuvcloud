@@ -410,6 +410,7 @@ function Dashboard() {
     if (!interlock) setRunning(false);
   };
 
+  const uvSeries = useMemo(() => interlock ? uvData.map(() => 0) : uvData, [interlock, uvData]);
   const elapsed = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 
   const downloadCSV = () => {
@@ -434,7 +435,7 @@ function Dashboard() {
   ]));
 
   return <section id="telemetria" className="section-band"><div className="container">
-    <SectionHeading code="02 / TELEMETRÍA IOT" title="Monitoreo de la Cabina en Tiempo Real" text="Supervisión continua de sensores con interrupció de seguridad automática interlock."/>
+    <SectionHeading code="02 / TELEMETRÍA IOT" title="Monitoreo de la Cabina en Tiempo Real" text="Supervisión continua de sensores con interrupción de seguridad automática interlock."/>
     
     <div className={`safety-banner ${interlock ? "alert" : "ok"}`}>
       <span className="pulse-dot"/>
@@ -457,7 +458,7 @@ function Dashboard() {
     <div className="telemetry-lower">
       <article className="metric-card stability-card">
         <div className="card-top"><span><Activity/> ESTABILIDAD DEL SISTEMA</span><small className="legend"><i className="lg-temp"/> Temp °C <i className="lg-uv"/> UV mW/cm²</small></div>
-        <LineChart values={tempData} secondary={interlock ? tempData.map(() => 0) : uvData}/>
+        <LineChart values={tempData} secondary={uvSeries}/>
       </article>
       <article className="metric-card export-center">
         <div className="card-top"><span><Download/> CENTRO DE EXPORTACIÓN</span></div>
