@@ -129,3 +129,71 @@ html{scroll-behavior:smooth}
 .export-row{position:relative;z-index:2;margin-top:20px}
 .export-options{display:grid;gap:10px}
 .export-id{font-family:"IBM Plex Mono",monospace;color:var(--primary)}
+
+/* ===== CECUV-Bot v2 ===== */
+.bot-v2{padding:0;overflow:hidden;border-radius:16px;border-color:color-mix(in oklab,var(--border) 60%,transparent);box-shadow:0 20px 60px -30px color-mix(in oklab,var(--primary) 50%,transparent)}
+.bot-v2 .bot-head{padding:16px 20px;border-bottom:1px solid color-mix(in oklab,var(--border) 60%,transparent);background:linear-gradient(90deg,color-mix(in oklab,var(--primary) 10%,var(--card)),var(--card))}
+.bot-v2 .bot-avatar{position:relative;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:var(--primary-foreground);box-shadow:0 0 0 0 var(--success);animation:neon-pulse 2s infinite}
+.bot-v2 .bot-avatar svg{width:22px}
+.bot-online{display:inline-flex;align-items:center;gap:6px;font:600 9px var(--font-mono);letter-spacing:.1em;color:var(--success)!important}
+.bot-online i{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);animation:pulse-ring 1.6s infinite;margin:0!important}
+.bot-tag{margin-left:auto;font:600 9px var(--font-mono);font-style:normal;padding:5px 10px;border-radius:999px;border:1px solid color-mix(in oklab,var(--primary) 50%,transparent);color:var(--primary)}
+@keyframes neon-pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--success) 70%,transparent)}70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.bot-v2 .bot-log{max-height:420px;min-height:260px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--background)}
+.bot-v2 .bot-turn{display:flex;gap:10px;align-items:flex-start;animation:bot-in .35s ease both;max-width:100%}
+.bot-v2 .bot-turn.user{justify-content:flex-end}
+.bot-v2 .bot-turn.user p{margin:0;max-width:80%;background:var(--primary);color:var(--primary-foreground);padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:13px;line-height:1.5}
+.bot-icon{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:color-mix(in oklab,var(--primary) 15%,var(--card));color:var(--primary)}
+.bot-icon svg{width:14px}
+.bot-bubble{flex:1;min-width:0;background:var(--card);border:1px solid color-mix(in oklab,var(--border) 60%,transparent);border-radius:4px 16px 16px 16px;padding:12px 16px;font-size:13px;line-height:1.65}
+.bot-bubble p{margin:0 0 8px}.bot-bubble p:last-child{margin:0}
+.bot-bullets{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:6px}
+.bot-bullets li{display:flex;gap:8px}.bot-bullets svg{flex:none;width:14px;margin-top:4px;color:var(--success)}
+.bot-caret{display:inline-block;width:7px;height:14px;background:var(--primary);vertical-align:middle;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+@keyframes bot-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.bot-typing{display:flex;gap:5px;flex:none;padding:14px 16px}
+.bot-typing i{width:7px;height:7px;border-radius:50%;background:var(--primary);animation:typing 1.2s infinite}
+.bot-typing i:nth-child(2){animation-delay:.15s}.bot-typing i:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-4px)}}
+.bot-v2 .bot-topics{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.bot-v2 .bot-topics span{display:inline-flex;align-items:center;gap:4px;font:500 10px var(--font-mono);padding:3px 8px;border-radius:999px;background:color-mix(in oklab,var(--success) 12%,transparent);color:var(--success)}
+.bot-v2 .bot-topics svg{width:11px}
+.bot-v2 .bot-prompts{padding:14px 20px 0;gap:8px}
+.bot-v2 .bot-prompts button{border-radius:999px;padding:7px 14px;font-size:11px;border-color:color-mix(in oklab,var(--primary) 35%,var(--border));transition:.2s}
+.bot-v2 .bot-prompts button:hover{background:color-mix(in oklab,var(--primary) 12%,transparent);transform:translateY(-1px)}
+.bot-v2 .bot-form{display:flex;gap:8px;padding:14px 20px 20px;margin:0}
+.bot-v2 .bot-form input{flex:1;min-width:0;height:46px;border-radius:999px;padding:0 18px;background:var(--background);border:1px solid color-mix(in oklab,var(--border) 70%,transparent);color:var(--foreground);font-size:13px;outline:none}
+.bot-v2 .bot-form input:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in oklab,var(--primary) 20%,transparent)}
+.bot-v2 .bot-form button{width:46px;height:46px;border-radius:50%;border:0;display:grid;place-items:center;background:var(--primary);color:var(--primary-foreground);cursor:pointer;box-shadow:0 0 18px color-mix(in oklab,var(--primary) 60%,transparent)}
+.bot-v2 .bot-form button:disabled{opacity:.5}
+
+/* ===== Telemetría v2 ===== */
+.safety-banner{border-radius:12px;flex-wrap:wrap}
+.safety-banner.ok{border-color:color-mix(in oklab,var(--success) 50%,transparent);background:color-mix(in oklab,var(--success) 8%,var(--card))}
+.safety-banner.alert{border-color:color-mix(in oklab,var(--danger) 60%,transparent);background:color-mix(in oklab,var(--danger) 10%,var(--card))}
+.safety-banner.alert b{color:var(--danger)}
+.safety-banner .telemetry-actions{flex:none;display:flex;gap:8px;margin-left:auto}
+.pulse-dot{width:12px;height:12px;border-radius:50%;background:var(--success);box-shadow:0 0 12px var(--success);animation:neon-pulse 1.6s infinite;flex:none}
+.safety-banner.alert .pulse-dot{background:var(--danger);box-shadow:0 0 12px var(--danger);animation:danger-pulse 1s infinite}
+@keyframes danger-pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--danger) 70%,transparent)}70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.metrics-6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.metrics-6 .metric-card,.telemetry-lower .metric-card{background:var(--card);border:1px solid color-mix(in oklab,var(--border) 60%,transparent);border-radius:12px;padding:18px}
+.metrics-6 .metric-card.warn{border-color:var(--danger)}.metrics-6 .metric-card.warn strong{color:var(--danger)}
+.metrics-6 .metric-card.safe strong{color:var(--success)}
+.metrics-6 .card-top,.telemetry-lower .card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font:600 10px var(--font-mono);letter-spacing:.08em;color:var(--muted-foreground)}
+.metrics-6 .card-top span,.telemetry-lower .card-top span{display:inline-flex;align-items:center;gap:6px}
+.metrics-6 .card-top svg,.telemetry-lower .card-top svg{width:14px;color:var(--primary)}
+.metrics-6 .metric-value strong{display:block;font:600 34px var(--font-mono);margin:14px 0 6px;color:var(--foreground)}
+.metrics-6 .metric-value sup{font-size:13px;margin-left:3px;color:var(--muted-foreground)}
+.metrics-6 .metric-footer{font-size:11px;color:var(--muted-foreground);margin:0}
+.telemetry-lower{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}
+.stability-card .line-chart{height:200px;margin-top:16px}
+.legend{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px}
+.lg-temp{background:var(--primary)}.lg-uv{background:var(--success)}
+.export-center{display:flex;flex-direction:column;gap:12px}
+.export-center p{margin:8px 0 4px;font-size:13px;color:var(--muted-foreground)}
+.export-primary{height:48px;font-weight:700;box-shadow:0 0 22px color-mix(in oklab,var(--primary) 55%,transparent)}
+@media (max-width:900px){.metrics-6{grid-template-columns:repeat(2,1fr)}.telemetry-lower{grid-template-columns:1fr}}
+@media (max-width:560px){.metrics-6{grid-template-columns:1fr}.safety-banner .telemetry-actions{margin-left:0;width:100%}}
