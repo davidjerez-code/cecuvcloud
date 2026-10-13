@@ -436,63 +436,35 @@ function Dashboard() {
   return <section id="telemetria" className="section-band"><div className="container">
     <SectionHeading code="02 / TELEMETRÍA IOT" title="Monitoreo de la Cabina en Tiempo Real" text="Supervisión continua de sensores con interrupció de seguridad automática interlock."/>
     
-    <div className="telemetry-bar">
-      <div className="status-pill">
-        <span className={`status-dot ${interlock ? "alert" : "active"}`} />
-        <b>ESTADO:</b> {interlock ? <span className="text-danger">PUERTA ABIERTA (PAUSA)</span> : <span className="text-success">IRRADIANDO UV-A (SEGURO)</span>}
-      </div>
+    <div className={`safety-banner ${interlock ? "alert" : "ok"}`}>
+      <span className="pulse-dot"/>
+      <b>{interlock ? "SISTEMA INTERRUMPIDO - APERTURA DETECTADA" : "SISTEMA SEGURO - OPERACIÓN NORMAL"}</b>
       <div className="telemetry-actions">
-        <Button variant={interlock ? "default" : "destructive"} size="sm" onClick={toggleInterlock}>
-          <ShieldCheck/> {interlock ? "Cerrar Interlock / Reanudar" : "Simular Apertura Interlock"}
-        </Button>
-        <Button variant="outline" size="sm" onClick={() => setRunning(!running)}>
-          {running ? <Clock3/> : <Play/>} {running ? "Pausar" : "Iniciar"}
-        </Button>
+        <Button variant={interlock ? "default" : "destructive"} size="sm" onClick={toggleInterlock}><ShieldCheck/> {interlock ? "Cerrar puerta / Reanudar" : "Simular apertura"}</Button>
+        <Button variant="outline" size="sm" onClick={() => setRunning(!running)}>{running ? <Clock3/> : <Play/>} {running ? "Pausar" : "Iniciar"}</Button>
       </div>
     </div>
 
-    <div className="dashboard-grid">
-      <article className="metric-card">
-        <div className="card-top"><span><Thermometer/> TEMPERATURA INTERNA</span><small className="badge safe">DHT22</small></div>
-        <div className="metric-value"><strong>{temp.toFixed(1)}<sup>°C</sup></strong></div>
-        <p className="metric-footer">Humedad: {humidity}% · Ventilación activa</p>
-        <LineChart values={tempData} />
-      </article>
-
-      <article className="metric-card">
-        <div className="card-top"><span><Sun/> INTENSIDAD UV-A (365 nm)</span><small className={`badge ${interlock ? "alert" : "active"}`}>{interlock ? "OFF" : "PWM 72%"}</small></div>
-        <div className="metric-value"><strong>{interlock ? "0.00" : uv.toFixed(2)}<sup>mW/cm²</sup></strong></div>
-        <p className="metric-footer">Sensor GUVA-S12SD radiación directa</p>
-        <LineChart values={interlock ? [0,0,0,0,0,0,0,0,0,0] : uvData} />
-      </article>
-
-      <article className="metric-card">
-        <div className="card-top"><span><RotateCcw/> AGITACIÓN MAGNÉTICA</span><small className="badge active">MULTIPUNTO</small></div>
-        <div className="metric-value"><strong>{interlock ? 0 : 420}<sup>RPM</sup></strong></div>
-        <p className="metric-footer">Suspensión de TiO₂ homogénea</p>
-      </article>
-
-      <article className="metric-card">
-        <div className="card-top"><span><Clock3/> TIEMPO DE ENSAYO</span><small className="badge">CEC-2609-041</small></div>
-        <div className="metric-value"><strong>{elapsed}</strong></div>
-        <p className="metric-footer">Tiempo continuo de irradiación</p>
-      </article>
+    <div className="metrics-6">
+      <article className={`metric-card ${temp > 35 ? "warn" : ""}`}><div className="card-top"><span><Thermometer/> TEMPERATURA INTERNA</span><small className="badge">Límite 35 °C</small></div><div className="metric-value"><strong>{temp.toFixed(1)}<sup>°C</sup></strong></div><p className="metric-footer">Sensor DHT22 · ventilación activa</p></article>
+      <article className="metric-card"><div className="card-top"><span><Droplets/> HUMEDAD RELATIVA</span><small className="badge">DHT22</small></div><div className="metric-value"><strong>{humidity.toFixed(1)}<sup>%</sup></strong></div><p className="metric-footer">Ambiente interno de la cámara</p></article>
+      <article className="metric-card"><div className="card-top"><span><Sun/> INTENSIDAD UV</span><small className="badge">UV-A 365 nm</small></div><div className="metric-value"><strong>{interlock ? "0.00" : uv.toFixed(2)}<sup>mW/cm²</sup></strong></div><p className="metric-footer">{interlock ? "Lámparas apagadas" : "PWM 72% · GUVA-S12SD"}</p></article>
+      <article className="metric-card"><div className="card-top"><span><Clock3/> CRONÓMETRO</span><small className="badge">CEC-2609-041</small></div><div className="metric-value"><strong>{elapsed}</strong></div><p className="metric-footer">Tiempo de ensayo (mm:ss)</p></article>
+      <article className="metric-card"><div className="card-top"><span><RotateCcw/> AGITACIÓN MAGNÉTICA</span><small className="badge">Multipunto</small></div><div className="metric-value"><strong>{interlock ? 0 : 420}<sup>RPM</sup></strong></div><p className="metric-footer">Suspensión homogénea de TiO₂</p></article>
+      <article className={`metric-card ${interlock ? "warn" : "safe"}`}><div className="card-top"><span><ShieldCheck/> SEGURIDAD INTERLOCK</span><small className="badge">Puerta</small></div><div className="metric-value"><strong>{interlock ? "ABIERTA" : "CERRADA"}</strong></div><p className="metric-footer">{interlock ? "Radiación interrumpida" : "Operación segura"}</p></article>
     </div>
 
-    <div className="export-row">
-      <Dialog>
-        <DialogTrigger asChild><Button variant="secondary"><Download/> Exporte el registro</Button></DialogTrigger>
-        <DialogContent className="export-dialog">
-          <DialogHeader>
-            <DialogTitle>Centro de exportación</DialogTitle>
-            <DialogDescription>Ensayo <b className="export-id">CEC-2609-041</b> · seleccione el formato.</DialogDescription>
-          </DialogHeader>
-          <div className="export-options">
-            <Button variant="secondary" onClick={downloadCSV}><FileSpreadsheet/> Hoja de cálculo (.csv)</Button>
-            <Button onClick={downloadCertificatePDF}><Download/> Certificado Oficial (PDF)</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+    <div className="telemetry-lower">
+      <article className="metric-card stability-card">
+        <div className="card-top"><span><Activity/> ESTABILIDAD DEL SISTEMA</span><small className="legend"><i className="lg-temp"/> Temp °C <i className="lg-uv"/> UV mW/cm²</small></div>
+        <LineChart values={tempData} secondary={interlock ? tempData.map(() => 0) : uvData}/>
+      </article>
+      <article className="metric-card export-center">
+        <div className="card-top"><span><Download/> CENTRO DE EXPORTACIÓN</span></div>
+        <p>Ensayo <b className="export-id">CEC-2609-041</b></p>
+        <Button className="export-primary" onClick={downloadCertificatePDF}><FileDown/> Exporte el registro</Button>
+        <Button variant="outline" onClick={downloadCSV}><FileSpreadsheet/> Descargar registro CSV</Button>
+      </article>
     </div>
   </div></section>;
 }
