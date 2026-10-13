@@ -530,7 +530,7 @@ function Footer() {
         <p>Cabina Experimental de Control UV · Universidad Cooperativa de Colombia (UCC)</p>
       </div>
       <div className="footer-logos">
-        <span>OPENIN</span> · <span>INDESCO</span> · <span>ESIS 2026</span>
+        <span>OPENIN</span><span>INDESCO</span><span>ESIS 2026</span>
       </div>
     </div>
     <div className="footer-bottom">
