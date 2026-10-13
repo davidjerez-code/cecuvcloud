@@ -197,7 +197,7 @@ export function answerQuestion(question: string): BotReply {
     };
   }
 
-  const top = scored.slice(0, 2);
+  const top = scored.length > 1 && scored[1]!.score >= scored[0]!.score * 0.8 ? scored.slice(0, 2) : scored.slice(0, 1);
   const text = top.map((s) => s.entry.answer).join("\n\n");
   return { text, topics: top.map((s) => s.entry.topic) };
 }

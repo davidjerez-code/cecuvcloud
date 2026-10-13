@@ -197,3 +197,5 @@ html{scroll-behavior:smooth}
 .export-primary{height:48px;font-weight:700;box-shadow:0 0 22px color-mix(in oklab,var(--primary) 55%,transparent)}
 @media (max-width:900px){.metrics-6{grid-template-columns:repeat(2,1fr)}.telemetry-lower{grid-template-columns:1fr}}
 @media (max-width:560px){.metrics-6{grid-template-columns:1fr}.safety-banner .telemetry-actions{margin-left:0;width:100%}}
+.bot-v2 .bot-turn,.bot-v2 .bot-turn.user{border:0!important;background:transparent!important;padding:0!important;margin:0!important}
+.bot-v2 .bot-turn.user p{font-family:var(--font-sans)}
