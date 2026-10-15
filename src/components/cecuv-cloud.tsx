@@ -530,10 +530,13 @@ export function CecuvCloud() {
     <AppHeader dark={dark} toggleDark={() => setDark(!dark)} />
     <main>
       <Hero />
+      <HowItWorksSection />
+      <ProblemContextSection />
       <Education />
       <Dashboard />
+      <section id="faq" className="section-band"><div className="container"><div className="faq-layout"><FaqAccordion /><UvCalculatorSimulator /></div></div></section>
       <Viability />
-      <Team />
+      <TeamAndAcknowledgements />
     </main>
     <Footer />
     <CecuvGuide />
