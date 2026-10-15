@@ -434,13 +434,13 @@ function Dashboard() {
 
   return <section id="telemetria" className="section-band"><div className="container">
     <SectionHeading code="02 / TELEMETRÍA IOT" title="Monitoreo de la Cabina en Tiempo Real" text="Supervisión continua de sensores con interrupción de seguridad automática interlock."/>
-    
+    {alertToast && <div className="safety-toast" role="alert"><AlertTriangle/> <span>¡ALERTA DE SEGURIDAD: Lámpara UV-A desactivada automáticamente por apertura de cabina!</span><button aria-label="Cerrar alerta" onClick={() => setAlertToast(false)}><X/></button></div>}
     <div className={`safety-banner ${interlock ? "alert" : "ok"}`}>
       <span className="pulse-dot"/>
-      <b>{interlock ? "SISTEMA INTERRUMPIDO - APERTURA DETECTADA" : "SISTEMA SEGURO - OPERACIÓN NORMAL"}</b>
+      <b>{interlock ? "SISTEMA INTERRUMPIDO - APERTURA DETECTADA" : running ? "ENSAYO EN CURSO - OPERACIÓN SEGURA" : "SISTEMA EN ESPERA - LISTO PARA INICIAR"}</b>
       <div className="telemetry-actions">
         <Button variant={interlock ? "default" : "destructive"} size="sm" onClick={toggleInterlock}><ShieldCheck/> {interlock ? "Cerrar puerta / Reanudar" : "Simular apertura"}</Button>
-        <Button variant="outline" size="sm" onClick={() => setRunning(!running)}>{running ? <Clock3/> : <Play/>} {running ? "Pausar" : "Iniciar"}</Button>
+        <Button size="sm" className={running ? "run-btn stop" : "run-btn start"} disabled={interlock} onClick={() => setRunning(!running)}>{running ? "⏸️ Detener Ensayo" : "▷ Iniciar"}</Button>
       </div>
     </div>
 
