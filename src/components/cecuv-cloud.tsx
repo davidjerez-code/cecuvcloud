@@ -32,12 +32,6 @@ const bom = [
   ["Mecánico", "Pistones neumáticos", "2", "$140.000"],
 ] as const;
 
-const team = [
-  ["JA", "John Alejandro Almanza Valderrama", "Ingeniería Industrial"],
-  ["AL", "Andrés Felipe Leguizamón Rodríguez", "Ingeniería Industrial"],
-  ["DJ", "David Stiven Jerez Díaz", "Ingeniería Industrial"],
-  ["SQ", "Sara Valentina Quintana López", "Ingeniería de Sistemas"],
-] as const;
 
 const quickPrompts = [
   "¿Por qué es peligroso el Cr(VI)?",
