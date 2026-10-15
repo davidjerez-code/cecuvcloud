@@ -504,22 +504,6 @@ function Viability() {
   </div></section>;
 }
 
-function Team() {
-  return <section id="equipo" className="section-band"><div className="container">
-    <SectionHeading code="04 / EQUIPO" title="Semillero de Investigación OPENIN" title-sub="Universidad Cooperativa de Colombia" text="Equipo multidisciplinario comprometido con la innovación abierta y el desarrollo tecnológico ambiental."/>
-    <div className="team-grid">
-      {team.map(([initials, name, career], i) => (
-        <article key={i} className="team-card">
-          <div className="avatar">{initials}</div>
-          <h3>{name}</h3>
-          <p>{career}</p>
-          <small>Investigador OPENIN</small>
-        </article>
-      ))}
-    </div>
-  </div></section>;
-}
-
 function Footer() {
   return <footer className="app-footer"><div className="container">
     <div className="footer-content">
