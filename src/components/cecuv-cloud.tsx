@@ -1,4 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { HowItWorksSection } from "@/components/HowItWorksSection";
+import { ProblemContextSection } from "@/components/ProblemContextSection";
+import { FaqAccordion } from "@/components/FaqAccordion";
+import { UvCalculatorSimulator } from "@/components/UvCalculatorSimulator";
+import { TeamAndAcknowledgements } from "@/components/TeamAndAcknowledgements";
 import {
   Activity, AlertTriangle, Atom, Bot, Box, CheckCircle2, ChevronRight,
   ClipboardList, Clock3, Download, Droplets, FileDown, FileSpreadsheet, FlaskConical, Gauge, GraduationCap,
