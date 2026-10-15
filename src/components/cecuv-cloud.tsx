@@ -384,30 +384,28 @@ function Education() {
 }
 
 function Dashboard() {
-  const [interlock, setInterlock] = useState(false), [running, setRunning] = useState(true), [seconds, setSeconds] = useState(2487);
+  const [interlock, setInterlock] = useState(false), [running, setRunning] = useState(false), [seconds, setSeconds] = useState(0);
+  const [alertToast, setAlertToast] = useState(false);
   const [temp, setTemp] = useState(32.4), [humidity, setHumidity] = useState(54.8), [uv, setUv] = useState(8.42);
-  const [tempData, setTempData] = useState([30.8,31,31.3,31.5,31.8,32,32.1,32.3,32.4,32.4]);
-  const [uvData, setUvData] = useState([7.9,8.1,8.2,8.4,8.3,8.4,8.5,8.4,8.42,8.42]);
+  const [tempData, setTempData] = useState([32.0,32.2,32.4,32.4,32.4,32.4,32.4,32.4,32.4,32.4]);
+  const [uvData, setUvData] = useState([8.4,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42]);
 
   useEffect(() => {
+    if (!running || interlock) return;
     const id = setInterval(() => {
-      if (running && !interlock) {
-        setSeconds(s => s + 1);
-        const nt = +(32.2 + Math.random() * .5).toFixed(1);
-        const nu = +(8.3 + Math.random() * .25).toFixed(2);
-        setTemp(nt);
-        setUv(nu);
-        setHumidity(+(54 + Math.random() * 2).toFixed(1));
-        setTempData(d => [...d.slice(-14), nt]);
-        setUvData(d => [...d.slice(-14), nu]);
-      }
-    }, 2000);
+      setSeconds(s => s + 1);
+      setTemp(t => { const n = +Math.min(34.2, Math.max(31.8, t + (Math.random() - .5) * .4)).toFixed(1); setTempData(d => [...d.slice(-14), n]); return n; });
+      setHumidity(h => +Math.min(56.5, Math.max(52, h + (Math.random() - .5) * .6)).toFixed(1));
+      setUv(u => { const n = +Math.min(8.65, Math.max(8.3, u + (Math.random() - .5) * .06)).toFixed(2); setUvData(d => [...d.slice(-14), n]); return n; });
+    }, 1000);
     return () => clearInterval(id);
   }, [running, interlock]);
 
+  useEffect(() => { if (!alertToast) return; const t = setTimeout(() => setAlertToast(false), 6000); return () => clearTimeout(t); }, [alertToast]);
+
   const toggleInterlock = () => {
+    if (!interlock) { setRunning(false); setAlertToast(true); }
     setInterlock(v => !v);
-    if (!interlock) setRunning(false);
   };
 
   const uvSeries = useMemo(() => interlock ? uvData.map(() => 0) : uvData, [interlock, uvData]);
