@@ -240,3 +240,49 @@ html{scroll-behavior:smooth}
 
 @media (max-width:900px){.viability-grid{grid-template-columns:1fr}.cost-summary{position:static}.team-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:520px){.team-grid{grid-template-columns:1fr}}
+
+/* ===== Nuevas secciones didácticas ===== */
+.section-heading>small{font:600 10px var(--font-mono);letter-spacing:.12em;color:var(--primary)}
+.safety-toast{position:fixed;z-index:60;top:86px;left:50%;transform:translateX(-50%);width:min(680px,calc(100% - 24px));display:flex;gap:10px;align-items:center;padding:14px 16px;background:var(--destructive);color:var(--destructive-foreground);font-weight:700;font-size:13px;box-shadow:0 18px 40px var(--stage-shadow);animation:toast-in .3s ease}
+.safety-toast svg{flex:none;width:20px}.safety-toast button{margin-left:auto;background:none;border:0;color:inherit;cursor:pointer}
+@keyframes toast-in{from{opacity:0;transform:translate(-50%,-14px)}}
+.run-btn.start{background:var(--success);color:var(--primary-foreground)}.run-btn.stop{background:var(--warning);color:var(--primary-foreground)}
+.blink-alert{color:var(--destructive);animation:blink 1s steps(2) infinite;font-size:.7em}
+@keyframes blink{50%{opacity:.25}}
+.hiw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.hiw-card{--tone:var(--success);text-align:left;background:var(--card);border:1px solid var(--border);padding:24px;color:var(--foreground);cursor:pointer;transition:.25s;font:inherit}
+.hiw-card.violet{--tone:oklch(0.62 0.24 300)}
+.hiw-card:hover,.hiw-card.active{border-color:var(--tone);box-shadow:0 0 0 1px var(--tone),0 0 36px color-mix(in oklab,var(--tone) 35%,transparent);transform:translateY(-4px)}
+.hiw-head{display:flex;justify-content:space-between;color:var(--tone)}.hiw-num{font:600 10px var(--font-mono);letter-spacing:.12em}
+.hiw-card h3{font-size:18px;margin:16px 0 8px}.hiw-card p{font-size:13px;line-height:1.65;color:var(--muted-foreground);margin:0}
+.hiw-visual{position:relative;height:90px;margin-top:16px;background:var(--surface);border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;gap:12px}
+.hiw-visual.flow i{position:absolute;top:40%;width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--primary);animation:flow 3s linear infinite}
+.hiw-visual.flow i:nth-child(2){animation-delay:.75s}.hiw-visual.flow i:nth-child(3){animation-delay:1.5s}.hiw-visual.flow i:nth-child(4){animation-delay:2.25s}
+@keyframes flow{from{left:-10%}to{left:105%}}
+.hiw-visual.photon .ti{font:700 18px var(--font-mono);color:var(--foreground)}
+.hiw-visual.photon i{position:absolute;top:0;width:2px;height:22px;background:oklch(0.62 0.24 300);box-shadow:0 0 10px oklch(0.62 0.24 300);animation:photon 1.4s linear infinite}
+.hiw-visual.photon i:nth-of-type(1){left:30%}.hiw-visual.photon i:nth-of-type(2){left:50%;animation-delay:.45s}.hiw-visual.photon i:nth-of-type(3){left:70%;animation-delay:.9s}
+@keyframes photon{from{top:-22px}to{top:60%;opacity:0}}
+.hiw-visual.photon em{position:absolute;right:18%;top:18%;font:700 13px var(--font-mono);font-style:normal;color:var(--primary);animation:jump 1.4s ease-in-out infinite}
+@keyframes jump{50%{transform:translateY(-10px)}}
+.hiw-visual.reduce b{font:700 16px var(--font-mono);padding:6px 10px;border:1px solid}.cr6{color:var(--warning)}.cr3{color:var(--success)}
+.hiw-visual.reduce .arrow{color:var(--primary);font-size:22px;animation:jump 1.4s infinite}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.problem-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--success);padding:26px}.problem-card.health{border-top-color:var(--destructive)}
+.problem-top{display:flex;justify-content:space-between;color:var(--success)}.health .problem-top{color:var(--destructive)}.problem-top small{font:600 10px var(--font-mono);color:var(--muted-foreground)}
+.problem-card h3{font-size:22px;margin:14px 0}.problem-card ul{padding-left:18px;margin:0;display:grid;gap:10px;font-size:13px;line-height:1.6;color:var(--muted-foreground)}.problem-card li b{color:var(--foreground)}
+.vs{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.vs span{font:600 10px var(--font-mono);padding:6px 9px;border:1px solid}.vs .bad{color:var(--destructive)}.vs .good{color:var(--success)}
+.faq-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start}.faq-box .section-heading{margin-bottom:20px}
+.faq-acc{background:var(--card);border:1px solid var(--border);padding:0 18px}
+.calc-box{padding:24px;display:grid;gap:20px}.calc-row{display:grid;gap:12px;font-size:13px}.calc-row span{display:flex;justify-content:space-between}.calc-row b{font-family:var(--font-mono);color:var(--primary)}
+.calc-results{display:grid;grid-template-columns:1fr 1fr;gap:12px}.calc-results>div{background:var(--surface);border:1px solid var(--border);padding:14px}
+.calc-results small{font:600 9px var(--font-mono);color:var(--muted-foreground);display:block}.calc-results strong{font:600 36px var(--font-mono);color:var(--success)}.calc-results sup{font-size:13px}.calc-results em{display:block;font-size:11px;color:var(--muted-foreground)}
+.calc-bar{height:8px;background:var(--surface);border:1px solid var(--border)}.calc-bar i{display:block;height:100%;background:var(--success);transition:width .4s}
+.dedication-card{position:relative;margin:40px 0 0;padding:32px;background:linear-gradient(135deg,color-mix(in oklab,var(--primary) 10%,var(--card)),var(--card));border:1px solid var(--border);border-left:4px solid var(--primary)}
+.dedication-card p,.mentor-msg{font-size:15px;line-height:1.85;font-style:italic;margin:0}
+.ack-title{display:flex;gap:8px;align-items:center;font:600 11px var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin-bottom:14px}.ack-title svg{width:16px}
+.quote-icon{position:absolute;right:24px;top:22px;width:44px;height:44px;opacity:.15}
+.mentor-card{margin-top:20px;padding:32px;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--success);display:grid;gap:18px}
+.mentor-profile{display:flex;gap:16px;align-items:center}.mentor-profile h3{margin:0 0 4px;font-size:20px}.mentor-profile p{margin:0;font-size:13px;color:var(--muted-foreground)}
+.avatar.big{flex:none;width:64px;height:64px;display:grid;place-items:center}
+@media(max-width:860px){.hiw-grid,.problem-grid,.faq-layout{grid-template-columns:1fr}.dedication-card,.mentor-card{padding:22px}}
