@@ -1,4 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { HowItWorksSection } from "@/components/HowItWorksSection";
+import { ProblemContextSection } from "@/components/ProblemContextSection";
+import { FaqAccordion } from "@/components/FaqAccordion";
+import { UvCalculatorSimulator } from "@/components/UvCalculatorSimulator";
+import { TeamAndAcknowledgements } from "@/components/TeamAndAcknowledgements";
 import {
   Activity, AlertTriangle, Atom, Bot, Box, CheckCircle2, ChevronRight,
   ClipboardList, Clock3, Download, Droplets, FileDown, FileSpreadsheet, FlaskConical, Gauge, GraduationCap,
@@ -32,12 +37,6 @@ const bom = [
   ["Mecánico", "Pistones neumáticos", "2", "$140.000"],
 ] as const;
 
-const team = [
-  ["JA", "John Alejandro Almanza Valderrama", "Ingeniería Industrial"],
-  ["AL", "Andrés Felipe Leguizamón Rodríguez", "Ingeniería Industrial"],
-  ["DJ", "David Stiven Jerez Díaz", "Ingeniería Industrial"],
-  ["SQ", "Sara Valentina Quintana López", "Ingeniería de Sistemas"],
-] as const;
 
 const quickPrompts = [
   "¿Por qué es peligroso el Cr(VI)?",
@@ -384,30 +383,28 @@ function Education() {
 }
 
 function Dashboard() {
-  const [interlock, setInterlock] = useState(false), [running, setRunning] = useState(true), [seconds, setSeconds] = useState(2487);
+  const [interlock, setInterlock] = useState(false), [running, setRunning] = useState(false), [seconds, setSeconds] = useState(0);
+  const [alertToast, setAlertToast] = useState(false);
   const [temp, setTemp] = useState(32.4), [humidity, setHumidity] = useState(54.8), [uv, setUv] = useState(8.42);
-  const [tempData, setTempData] = useState([30.8,31,31.3,31.5,31.8,32,32.1,32.3,32.4,32.4]);
-  const [uvData, setUvData] = useState([7.9,8.1,8.2,8.4,8.3,8.4,8.5,8.4,8.42,8.42]);
+  const [tempData, setTempData] = useState([32.0,32.2,32.4,32.4,32.4,32.4,32.4,32.4,32.4,32.4]);
+  const [uvData, setUvData] = useState([8.4,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42]);
 
   useEffect(() => {
+    if (!running || interlock) return;
     const id = setInterval(() => {
-      if (running && !interlock) {
-        setSeconds(s => s + 1);
-        const nt = +(32.2 + Math.random() * .5).toFixed(1);
-        const nu = +(8.3 + Math.random() * .25).toFixed(2);
-        setTemp(nt);
-        setUv(nu);
-        setHumidity(+(54 + Math.random() * 2).toFixed(1));
-        setTempData(d => [...d.slice(-14), nt]);
-        setUvData(d => [...d.slice(-14), nu]);
-      }
-    }, 2000);
+      setSeconds(s => s + 1);
+      setTemp(t => { const n = +Math.min(34.2, Math.max(31.8, t + (Math.random() - .5) * .4)).toFixed(1); setTempData(d => [...d.slice(-14), n]); return n; });
+      setHumidity(h => +Math.min(56.5, Math.max(52, h + (Math.random() - .5) * .6)).toFixed(1));
+      setUv(u => { const n = +Math.min(8.65, Math.max(8.3, u + (Math.random() - .5) * .06)).toFixed(2); setUvData(d => [...d.slice(-14), n]); return n; });
+    }, 1000);
     return () => clearInterval(id);
   }, [running, interlock]);
 
+  useEffect(() => { if (!alertToast) return; const t = setTimeout(() => setAlertToast(false), 6000); return () => clearTimeout(t); }, [alertToast]);
+
   const toggleInterlock = () => {
+    if (!interlock) { setRunning(false); setAlertToast(true); }
     setInterlock(v => !v);
-    if (!interlock) setRunning(false);
   };
 
   const uvSeries = useMemo(() => interlock ? uvData.map(() => 0) : uvData, [interlock, uvData]);
@@ -436,13 +433,13 @@ function Dashboard() {
 
   return <section id="telemetria" className="section-band"><div className="container">
     <SectionHeading code="02 / TELEMETRÍA IOT" title="Monitoreo de la Cabina en Tiempo Real" text="Supervisión continua de sensores con interrupción de seguridad automática interlock."/>
-    
+    {alertToast && <div className="safety-toast" role="alert"><AlertTriangle/> <span>¡ALERTA DE SEGURIDAD: Lámpara UV-A desactivada automáticamente por apertura de cabina!</span><button aria-label="Cerrar alerta" onClick={() => setAlertToast(false)}><X/></button></div>}
     <div className={`safety-banner ${interlock ? "alert" : "ok"}`}>
       <span className="pulse-dot"/>
-      <b>{interlock ? "SISTEMA INTERRUMPIDO - APERTURA DETECTADA" : "SISTEMA SEGURO - OPERACIÓN NORMAL"}</b>
+      <b>{interlock ? "SISTEMA INTERRUMPIDO - APERTURA DETECTADA" : running ? "ENSAYO EN CURSO - OPERACIÓN SEGURA" : "SISTEMA EN ESPERA - LISTO PARA INICIAR"}</b>
       <div className="telemetry-actions">
         <Button variant={interlock ? "default" : "destructive"} size="sm" onClick={toggleInterlock}><ShieldCheck/> {interlock ? "Cerrar puerta / Reanudar" : "Simular apertura"}</Button>
-        <Button variant="outline" size="sm" onClick={() => setRunning(!running)}>{running ? <Clock3/> : <Play/>} {running ? "Pausar" : "Iniciar"}</Button>
+        <Button size="sm" className={running ? "run-btn stop" : "run-btn start"} disabled={interlock} onClick={() => setRunning(!running)}>{running ? "⏸️ Detener Ensayo" : "▷ Iniciar"}</Button>
       </div>
     </div>
 
@@ -506,22 +503,6 @@ function Viability() {
   </div></section>;
 }
 
-function Team() {
-  return <section id="equipo" className="section-band"><div className="container">
-    <SectionHeading code="04 / EQUIPO" title="Semillero de Investigación OPENIN" title-sub="Universidad Cooperativa de Colombia" text="Equipo multidisciplinario comprometido con la innovación abierta y el desarrollo tecnológico ambiental."/>
-    <div className="team-grid">
-      {team.map(([initials, name, career], i) => (
-        <article key={i} className="team-card">
-          <div className="avatar">{initials}</div>
-          <h3>{name}</h3>
-          <p>{career}</p>
-          <small>Investigador OPENIN</small>
-        </article>
-      ))}
-    </div>
-  </div></section>;
-}
-
 function Footer() {
   return <footer className="app-footer"><div className="container">
     <div className="footer-content">
@@ -554,10 +535,13 @@ export function CecuvCloud() {
     <AppHeader dark={dark} toggleDark={() => setDark(!dark)} />
     <main>
       <Hero />
+      <HowItWorksSection />
+      <ProblemContextSection />
       <Education />
       <Dashboard />
+      <section id="faq" className="section-band"><div className="container"><div className="faq-layout"><FaqAccordion /><UvCalculatorSimulator /></div></div></section>
       <Viability />
-      <Team />
+      <TeamAndAcknowledgements />
     </main>
     <Footer />
     <CecuvGuide />
