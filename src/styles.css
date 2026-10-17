@@ -303,6 +303,11 @@ html{scroll-behavior:smooth}
 .bot-head>div{min-width:0}.bot-tag{white-space:normal;text-align:center}
 .bot-bubble,.bot-turn.user p{overflow-wrap:anywhere}
 .method-dialog{max-height:calc(100dvh - 40px);overflow-y:auto}
+.method-list{display:grid;gap:16px}
+.method-list article{display:flex;gap:14px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.method-list article>span{flex:none;font:600 18px var(--font-mono);color:var(--primary)}
+.method-list h4{font-weight:700;margin:0 0 4px}
+.method-list p{font-size:13px;line-height:1.6;color:var(--muted-foreground);margin:0}
 .method-trigger{height:auto;white-space:normal;text-align:left;justify-content:flex-start;min-height:44px}
 .method-trigger svg{flex:none}
 .bom-table-wrapper{min-width:0}

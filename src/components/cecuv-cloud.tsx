@@ -392,6 +392,7 @@ function Dashboard() {
   const [interlock, setInterlock] = useState(false), [running, setRunning] = useState(false), [seconds, setSeconds] = useState(0);
   const [alertToast, setAlertToast] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const recordRef = useRef<string[]>([]);
   const [temp, setTemp] = useState(32.4), [humidity, setHumidity] = useState(54.8), [uv, setUv] = useState(8.42);
   const [tempData, setTempData] = useState([32.0,32.2,32.4,32.4,32.4,32.4,32.4,32.4,32.4,32.4]);
   const [uvData, setUvData] = useState([8.4,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42]);
@@ -418,10 +419,15 @@ function Dashboard() {
   const elapsed = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
   const outputs = operatingOutputs(running, interlock, uv);
 
+  useEffect(() => {
+    const current = operatingOutputs(running, interlock, uv);
+    recordRef.current = [...recordRef.current.slice(-3599), `CEC-2609-041,${new Date().toISOString()},${temp},${humidity},${current.uv},${current.rpm},${interlock ? "abierto" : "cerrado"}`];
+  }, [seconds, running, interlock, temp, humidity, uv]);
+
   const downloadCSV = () => {
     const rows = [
       "id_ensayo,timestamp,temperatura_c,humedad_pct,uv_mw_cm2,rpm,interlock",
-      `CEC-2609-041,${new Date().toISOString()},${temp},${humidity},${outputs.uv},${outputs.rpm},${interlock ? "abierto" : "cerrado"}`
+      ...recordRef.current
     ];
     downloadBlob("CECUV_CEC-2609-041_telemetria.csv", new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" }));
   };
