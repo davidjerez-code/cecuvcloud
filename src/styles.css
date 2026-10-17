@@ -286,3 +286,40 @@ html{scroll-behavior:smooth}
 .mentor-profile{display:flex;gap:16px;align-items:center}.mentor-profile h3{margin:0 0 4px;font-size:20px}.mentor-profile p{margin:0;font-size:13px;color:var(--muted-foreground)}
 .avatar.big{flex:none;width:64px;height:64px;display:grid;place-items:center}
 @media(max-width:860px){.hiw-grid,.problem-grid,.faq-layout{grid-template-columns:1fr}.dedication-card,.mentor-card{padding:22px}}
+
+/* Final presentation and small-screen checks */
+.platform-qr{display:flex;justify-content:center;padding:16px;background:var(--card)}
+.platform-qr svg{max-width:100%;height:auto}
+.qr-dialog code{overflow-wrap:anywhere;text-align:center;font-size:12px}
+.hiw-card{display:block;height:auto;white-space:normal;border-radius:8px}
+.hiw-card:focus-visible{outline:2px solid var(--primary);outline-offset:4px}
+.calc-box .card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font:600 10px var(--font-mono);color:var(--muted-foreground)}
+.calc-box .card-top>span{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.calc-box .card-top svg{width:18px;height:18px;flex:none;color:var(--primary)}
+.calc-box .badge{white-space:nowrap}
+.calc-box .metric-footer{margin:0;font-size:12px;line-height:1.6;color:var(--muted-foreground)}
+.guide-card{max-height:calc(100dvh - 110px);overflow-y:auto;border-radius:8px;box-shadow:0 20px 50px -20px var(--stage-shadow)}
+.guide-launcher{height:auto;white-space:normal}
+.bot-head>div{min-width:0}.bot-tag{white-space:normal;text-align:center}
+.bot-bubble,.bot-turn.user p{overflow-wrap:anywhere}
+.method-dialog{max-height:calc(100dvh - 40px);overflow-y:auto}
+.method-trigger{height:auto;white-space:normal;text-align:left;justify-content:flex-start;min-height:44px}
+.method-trigger svg{flex:none}
+.bom-table-wrapper{min-width:0}
+@media(max-width:560px){
+  .guide-launcher{width:48px;height:48px;padding:0;border-radius:50%}
+  .guide-launcher span{display:none}.guide-launcher svg{width:20px;height:20px}
+  .guide-widget{right:12px;bottom:12px;max-width:calc(100vw - 24px)}
+  .guide-card{width:340px}
+  .bot-v2 .bot-head{flex-wrap:wrap;gap:10px;padding:16px}
+  .bot-tag{margin-left:54px}
+  .telemetry-actions{flex-wrap:wrap}
+  .metrics-6 .card-top{flex-wrap:wrap}
+  .summary-card h2{font-size:28px;overflow-wrap:anywhere}
+  .mentor-profile{align-items:flex-start;flex-wrap:wrap}
+  .footer-content p{line-height:1.6}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .cecuv-app *, .cecuv-app *::before, .cecuv-app *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
