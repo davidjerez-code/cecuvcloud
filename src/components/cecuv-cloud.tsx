@@ -14,6 +14,10 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { answerQuestion } from "@/lib/cecuv-knowledge";
+import { QRCodeSVG } from "qrcode.react";
+import { kineticConcentration, operatingOutputs } from "@/lib/cecuv-simulation";
+
+const PLATFORM_URL = "https://cecuvcloud.lovable.app";
 
 const hotspots = [
   ["Chasis principal", "Madera Triplex Marino de 15 mm: resistente a la humedad y aislante térmico/radiativo."],
@@ -87,6 +91,7 @@ function BotPanel() {
     { role: "bot", text: "Hola, soy CECUV—Bot v2.0. Consulto la matriz de conocimiento del trabajo escrito del Semillero OPENIN. Pregúnteme sobre Cr(VI), fotocatálisis, sensores ESP32/DHT22, costos o metodología." },
   ]);
   const logRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const el = logRef.current;
@@ -109,7 +114,7 @@ function BotPanel() {
   return <div className="bot-panel bot-v2">
     <div className="bot-head">
       <span className="bot-avatar"><Bot/></span>
-      <div><h3>CECUV—Bot v2.0</h3><small className="bot-online"><i/> ONLINE / IA CONECTADA</small></div>
+      <div><h3>CECUV—Bot v2.0</h3><small className="bot-online"><i/> MATRIZ OPENIN</small></div>
       <em className="bot-tag">Semillero OPENIN</em>
     </div>
     <div className="bot-log" ref={logRef} aria-live="polite">
@@ -121,10 +126,10 @@ function BotPanel() {
           </div></div>)}
       {thinking && <div className="bot-turn"><span className="bot-icon"><Sparkles/></span><div className="bot-bubble bot-typing"><i/><i/><i/></div></div>}
     </div>
-    <div className="bot-prompts">{botChips.map((p) => <button key={p} type="button" onClick={() => send(p)}>{p}</button>)}</div>
+    <div className="bot-prompts">{botChips.map((p) => <Button variant="outline" key={p} type="button" onClick={() => { setInput(p); inputRef.current?.focus(); }}>{p}</Button>)}</div>
     <form className="bot-form" onSubmit={(e) => { e.preventDefault(); send(input); }}>
-      <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Escriba su pregunta y presione Enter…" aria-label="Pregunta para CECUV-Bot"/>
-      <button type="submit" aria-label="Enviar pregunta" disabled={thinking}><ChevronRight/></button>
+      <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Escriba su pregunta…" aria-label="Pregunta para CECUV-Bot"/>
+      <Button type="submit" size="icon" aria-label="Enviar pregunta" disabled={thinking || !input.trim()}><ChevronRight/></Button>
     </form>
   </div>;
 }
@@ -138,13 +143,7 @@ function SectionHeading({ code, title, text }: { code: string; title: string; te
 }
 
 function QrPattern() {
-  const cells = Array.from({ length: 225 }, (_, i) => {
-    const x = i % 15, y = Math.floor(i / 15);
-    const finder = (x < 5 && y < 5) || (x > 9 && y < 5) || (x < 5 && y > 9);
-    const center = finder && ((x % 10 === 0 || x % 10 === 4 || y % 10 === 0 || y % 10 === 4) || (x % 10 >= 2 && x % 10 <= 3 && y % 10 >= 2 && y % 10 <= 3));
-    return finder ? center : ((x * 7 + y * 11 + x * y) % 5 < 2);
-  });
-  return <div className="qr-pattern" aria-label="Código QR de CECUV-Cloud">{cells.map((on, i) => <i key={i} className={on ? "on" : ""} />)}</div>;
+  return <div className="platform-qr"><QRCodeSVG value={PLATFORM_URL} size={220} marginSize={4} level="M" title="Código QR de CECUV-Cloud"/></div>;
 }
 
 function MethodologyDialog() {
@@ -287,13 +286,20 @@ function Cabinet({ active, setActive }: { active: number; setActive: (n: number)
   </div>;
 }
 
-function LineChart({ values, secondary }: { values: number[]; secondary?: number[] }) {
+function LineChart({ values, secondary, fixedScale = false }: { values: number[]; secondary?: number[]; fixedScale?: boolean }) {
   const [displayValues, setDisplayValues] = useState(values);
   const [displaySecondary, setDisplaySecondary] = useState(secondary);
   const primaryRef = useRef(values);
   const secondaryRef = useRef(secondary);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplayValues(values);
+      setDisplaySecondary(secondary);
+      primaryRef.current = values;
+      secondaryRef.current = secondary;
+      return;
+    }
     const startPrimary = primaryRef.current.length === values.length ? primaryRef.current : values;
     const startSecondary = secondaryRef.current && secondary && secondaryRef.current.length === secondary.length ? secondaryRef.current : secondary;
     const started = performance.now();
@@ -329,11 +335,11 @@ function LineChart({ values, secondary }: { values: number[]; secondary?: number
     const divisor = Math.max(1, arr.length - 1);
     return arr.map((v,i) => `${i ? "L" : "M"} ${(i/divisor)*100} ${48-((v-min)/span)*42}`).join(" ");
   };
-  const primaryMin = Math.min(...displayValues) - 2;
-  const primaryMax = Math.max(...displayValues) + 2;
+  const primaryMin = fixedScale ? 0 : Math.min(...displayValues) - 2;
+  const primaryMax = fixedScale ? 100 : Math.max(...displayValues) + 2;
   const primaryPath = path(displayValues, primaryMin, primaryMax);
   const secondaryPath = displaySecondary ? path(displaySecondary, Math.min(...displaySecondary)-1, Math.max(...displaySecondary)+1) : "";
-  return <svg className="line-chart" viewBox="0 0 100 52" preserveAspectRatio="none" aria-label="Gráfica de datos"><g className="grid-lines">{[8,18,28,38,48].map(y=><line key={y} x1="0" x2="100" y1={y} y2={y}/>)}</g><path className="area" d={`${primaryPath} L100 52 L0 52Z`} /><path key={primaryPath} className="line-primary" pathLength={100} d={primaryPath} />{displaySecondary && <path key={secondaryPath} className="line-success" pathLength={100} d={secondaryPath} />}</svg>;
+  return <svg className="line-chart" viewBox="0 0 100 52" preserveAspectRatio="none" aria-label="Gráfica de datos"><g className="grid-lines">{[8,18,28,38,48].map(y=><line key={y} x1="0" x2="100" y1={y} y2={y}/>)}</g><path className="area" d={`${primaryPath} L100 52 L0 52Z`} /><path className="line-primary" pathLength={100} d={primaryPath} />{displaySecondary && <path className="line-success" pathLength={100} d={secondaryPath} />}</svg>;
 }
 
 function AppHeader({ dark, toggleDark }: { dark: boolean; toggleDark: () => void }) {
@@ -344,7 +350,7 @@ function AppHeader({ dark, toggleDark }: { dark: boolean; toggleDark: () => void
     <button className="brand" onClick={()=>go("inicio")} aria-label="Ir al inicio"><span className="brand-symbol"><Atom /></span><span><b>CECUV</b><em>Cloud</em><small>LABORATORIO ABIERTO · IoT</small></span></button>
     <nav className={open?"open":""} aria-label="Navegación principal">{nav.map(([label,id])=><button key={id} onClick={()=>go(id)}>{label}</button>)}</nav>
     <div className="header-tools"><Button variant="outline" size="icon" onClick={toggleDark} title={dark?"Modo claro":"Modo oscuro"}>{dark?<Sun/>:<Moon/>}</Button>
-      <Dialog><DialogTrigger asChild><Button variant="outline" size="icon" title="Desplegar QR"><QrCode/></Button></DialogTrigger><DialogContent className="qr-dialog"><DialogHeader><DialogTitle>CECUV-Cloud móvil</DialogTitle><DialogDescription>Escanee para abrir la plataforma desde otro dispositivo.</DialogDescription></DialogHeader><QrPattern/><code>cecuv-cloud.esis2026.edu.co</code></DialogContent></Dialog>
+      <Dialog><DialogTrigger asChild><Button variant="outline" size="icon" title="Desplegar QR" aria-label="Desplegar QR"><QrCode/></Button></DialogTrigger><DialogContent className="qr-dialog"><DialogHeader><DialogTitle>CECUV-Cloud móvil</DialogTitle><DialogDescription>Escanee para abrir la plataforma desde otro dispositivo.</DialogDescription></DialogHeader><QrPattern/><code>{PLATFORM_URL}</code></DialogContent></Dialog>
       <Button variant="outline" size="icon" className="menu-button" onClick={()=>setOpen(!open)} aria-label="Abrir menú">{open?<X/>:<Menu/>}</Button>
     </div>
   </div></header>;
@@ -366,18 +372,18 @@ function Hero() {
 
 function Education() {
   const [tio, setTio] = useState(1.2), [time, setTime] = useState(75), [power, setPower] = useState(72);
-  const efficiency = Math.min(96, Math.round((1-Math.exp(-0.00034*tio*power*time))*100));
-  const curve = useMemo(()=>Array.from({length:20},(_,i)=>100-(1-Math.exp(-0.00034*tio*power*(time*i/19)))*100),[tio,time,power]);
+  const efficiency = Math.round(100 - kineticConcentration(tio, power, time));
+  const curve = useMemo(()=>Array.from({length:20},(_,i)=>kineticConcentration(tio,power,time*i/19)),[tio,time,power]);
   return <section id="educacion" className="section-band"><div className="container"><SectionHeading code="01 / EDUCACIÓN" title="Ciencia que se puede explorar" text="Comprenda el problema, consulte al asistente y experimente con variables fotocatalíticas."/>
     <div className="education-grid"><div className="research-column"><div className="research-cards">
-      <article className="info-card"><div className="card-icon danger"><AlertTriangle/></div><small>PROBLEMÁTICA</small><h3>Cromo Hexavalente · Cr(VI)</h3><p>Contaminante highly tóxico presente en efluentes de curtiembres, galvanoplastia y pigmentos.</p><div className="metric-line"><b>0,05 mg/L</b><span>Límite máximo recomendado por OMS</span></div></article>
+      <article className="info-card"><div className="card-icon danger"><AlertTriangle/></div><small>PROBLEMÁTICA</small><h3>Cromo Hexavalente · Cr(VI)</h3><p>Contaminante altamente tóxico presente en efluentes de curtiembres, galvanoplastia y pigmentos.</p><div className="metric-line"><b>0,05 mg/L</b><span>Límite máximo recomendado por OMS</span></div></article>
       <article className="info-card"><div className="card-icon"><FlaskConical/></div><small>ENFOQUE</small><h3>Procesos de Oxidación Avanzada</h3><p>Fotocatálisis heterogénea TiO₂/UV-A para estandarizar ensayos y reducir el ruido experimental.</p><div className="tag-row"><span>TiO₂</span><span>UV-A 365 nm</span><span>PAO</span></div></article>
     </div><MethodologyDialog/><div id="bot-guia"><BotPanel/></div></div>
     <div className="doe-panel"><div className="panel-label"><span><Gauge/> SIMULADOR DoE</span><i>PROYECCIÓN TEÓRICA</i></div><h3>Diseñe su ensayo fotocatalítico</h3><p>Ajuste las condiciones y observe la cinética estimada de remoción.</p>
       <div className="control"><label><span>Concentración de TiO₂</span><b>{tio.toFixed(1)} g/L</b></label><Slider min={0.5} max={2} step={0.1} value={[tio]} onValueChange={v=>setTio(v[0] ?? tio)}/><div><span>0.5</span><span>2.0</span></div></div>
       <div className="control"><label><span>Tiempo de exposición</span><b>{time} min</b></label><Slider min={0} max={120} step={5} value={[time]} onValueChange={v=>setTime(v[0] ?? time)}/><div><span>0</span><span>120</span></div></div>
       <div className="control"><label><span>Potencia radiativa LED</span><b>{power}%</b></label><Slider min={10} max={100} step={1} value={[power]} onValueChange={v=>setPower(v[0] ?? power)}/><div><span>10%</span><span>100%</span></div></div>
-      <div className="doe-result"><div><small>EFICIENCIA TEÓRICA</small><strong>{efficiency}<sup>%</sup></strong><span>Remoción estimada de Cr(VI)</span></div><div className="kinetic-chart"><div className="chart-y"><span>100</span><span>50</span><span>0</span></div><LineChart values={curve}/><div className="chart-caption">Concentración relativa vs. tiempo</div></div></div>
+      <div className="doe-result"><div><small>EFICIENCIA TEÓRICA</small><strong>{efficiency}<sup>%</sup></strong><span>Remoción estimada de Cr(VI)</span></div><div className="kinetic-chart"><div className="chart-y"><span>100</span><span>50</span><span>0</span></div><LineChart values={curve} fixedScale/><div className="chart-caption">Concentración relativa · 0–{time} min</div></div></div>
       <div className="formula"><span>MODELO CINÉTICO</span><code>C/C₀ = e<sup>−k·t</sup></code><i>R² = 0.972</i></div>
     </div></div></div></section>;
 }
@@ -385,6 +391,8 @@ function Education() {
 function Dashboard() {
   const [interlock, setInterlock] = useState(false), [running, setRunning] = useState(false), [seconds, setSeconds] = useState(0);
   const [alertToast, setAlertToast] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  const recordRef = useRef<string[]>([]);
   const [temp, setTemp] = useState(32.4), [humidity, setHumidity] = useState(54.8), [uv, setUv] = useState(8.42);
   const [tempData, setTempData] = useState([32.0,32.2,32.4,32.4,32.4,32.4,32.4,32.4,32.4,32.4]);
   const [uvData, setUvData] = useState([8.4,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42,8.42]);
@@ -409,11 +417,17 @@ function Dashboard() {
 
   const uvSeries = useMemo(() => interlock ? uvData.map(() => 0) : uvData, [interlock, uvData]);
   const elapsed = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+  const outputs = operatingOutputs(running, interlock, uv);
+
+  useEffect(() => {
+    const current = operatingOutputs(running, interlock, uv);
+    recordRef.current = [...recordRef.current.slice(-3599), `CEC-2609-041,${new Date().toISOString()},${temp},${humidity},${current.uv},${current.rpm},${interlock ? "abierto" : "cerrado"}`];
+  }, [seconds, running, interlock, temp, humidity, uv]);
 
   const downloadCSV = () => {
     const rows = [
       "id_ensayo,timestamp,temperatura_c,humedad_pct,uv_mw_cm2,rpm,interlock",
-      ...tempData.map((v, i) => `CEC-2609-041,${new Date(Date.now() - (tempData.length - i) * 2000).toISOString()},${v},${humidity},${uvData[i] ?? uv},${interlock ? 0 : 420},${interlock ? "abierto" : "cerrado"}`)
+      ...recordRef.current
     ];
     downloadBlob("CECUV_CEC-2609-041_telemetria.csv", new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" }));
   };
@@ -424,8 +438,8 @@ function Dashboard() {
     `Tiempo registrado: ${elapsed}`,
     `Temperatura interna: ${temp.toFixed(1)} C`,
     `Humedad relativa: ${humidity.toFixed(1)} %`,
-    `Intensidad UV-A: ${interlock ? "0.00" : uv.toFixed(2)} mW/cm2`,
-    `Agitacion magnetica: ${interlock ? "0" : "420"} RPM`,
+    `Intensidad UV-A: ${outputs.uv.toFixed(2)} mW/cm2`,
+    `Agitacion magnetica: ${outputs.rpm} RPM`,
     `Interlock: ${interlock ? "abierto - radiacion interrumpida" : "cerrado - operacion normal"}`,
     "Proceso: Fotocatalisis heterogenea TiO2 + UV-A 365 nm",
     "Trazabilidad: registro simulado para ponencia ESIS 2026",
@@ -438,7 +452,7 @@ function Dashboard() {
       <span className="pulse-dot"/>
       <b>{interlock ? "SISTEMA INTERRUMPIDO - APERTURA DETECTADA" : running ? "ENSAYO EN CURSO - OPERACIÓN SEGURA" : "SISTEMA EN ESPERA - LISTO PARA INICIAR"}</b>
       <div className="telemetry-actions">
-        <Button variant={interlock ? "default" : "destructive"} size="sm" onClick={toggleInterlock}><ShieldCheck/> {interlock ? "Cerrar puerta / Reanudar" : "Simular apertura"}</Button>
+        <Button variant={interlock ? "default" : "destructive"} size="sm" onClick={toggleInterlock}><ShieldCheck/> {interlock ? "Cerrar puerta" : "Simular apertura"}</Button>
         <Button size="sm" className={running ? "run-btn stop" : "run-btn start"} disabled={interlock} onClick={() => setRunning(!running)}>{running ? "⏸️ Detener Ensayo" : "▷ Iniciar"}</Button>
       </div>
     </div>
@@ -446,9 +460,9 @@ function Dashboard() {
     <div className="metrics-6">
       <article className={`metric-card ${temp > 35 ? "warn" : ""}`}><div className="card-top"><span><Thermometer/> TEMPERATURA INTERNA</span><small className="badge">Límite 35 °C</small></div><div className="metric-value"><strong>{temp.toFixed(1)}<sup>°C</sup></strong></div><p className="metric-footer">Sensor DHT22 · ventilación activa</p></article>
       <article className="metric-card"><div className="card-top"><span><Droplets/> HUMEDAD RELATIVA</span><small className="badge">DHT22</small></div><div className="metric-value"><strong>{humidity.toFixed(1)}<sup>%</sup></strong></div><p className="metric-footer">Ambiente interno de la cámara</p></article>
-      <article className="metric-card"><div className="card-top"><span><Sun/> INTENSIDAD UV</span><small className="badge">UV-A 365 nm</small></div><div className="metric-value"><strong>{interlock ? "0.00" : uv.toFixed(2)}<sup>mW/cm²</sup></strong></div><p className="metric-footer">{interlock ? "Lámparas apagadas" : "PWM 72% · GUVA-S12SD"}</p></article>
+      <article className="metric-card"><div className="card-top"><span><Sun/> INTENSIDAD UV</span><small className="badge">UV-A 365 nm</small></div><div className="metric-value"><strong>{outputs.uv.toFixed(2)}<sup>mW/cm²</sup></strong></div><p className="metric-footer">{outputs.uv === 0 ? "Lámparas apagadas" : "PWM 72% · GUVA-S12SD"}</p></article>
       <article className="metric-card"><div className="card-top"><span><Clock3/> CRONÓMETRO</span><small className="badge">CEC-2609-041</small></div><div className="metric-value"><strong>{elapsed}</strong></div><p className="metric-footer">Tiempo de ensayo (mm:ss)</p></article>
-      <article className="metric-card"><div className="card-top"><span><RotateCcw/> AGITACIÓN MAGNÉTICA</span><small className="badge">Multipunto</small></div><div className="metric-value"><strong>{interlock ? 0 : 420}<sup>RPM</sup></strong></div><p className="metric-footer">Suspensión homogénea de TiO₂</p></article>
+      <article className="metric-card"><div className="card-top"><span><RotateCcw/> AGITACIÓN MAGNÉTICA</span><small className="badge">Multipunto</small></div><div className="metric-value"><strong>{outputs.rpm}<sup>RPM</sup></strong></div><p className="metric-footer">Suspensión homogénea de TiO₂</p></article>
       <article className={`metric-card ${interlock ? "warn" : "safe"}`}><div className="card-top"><span><ShieldCheck/> SEGURIDAD INTERLOCK</span><small className="badge">Puerta</small></div><div className="metric-value"><strong>{interlock ? "ABIERTA" : "CERRADA"}</strong></div><p className="metric-footer">{interlock ? "Radiación interrumpida" : "Operación segura"}</p></article>
     </div>
 
@@ -460,7 +474,7 @@ function Dashboard() {
       <article className="metric-card export-center">
         <div className="card-top"><span><Download/> CENTRO DE EXPORTACIÓN</span></div>
         <p>Ensayo <b className="export-id">CEC-2609-041</b></p>
-        <Button className="export-primary" onClick={downloadCertificatePDF}><FileDown/> Exporte el registro</Button>
+        <Dialog open={exportOpen} onOpenChange={setExportOpen}><DialogTrigger asChild><Button className="export-primary"><FileDown/> Exporte el registro</Button></DialogTrigger><DialogContent><DialogHeader><DialogTitle>Exportar ensayo CEC-2609-041</DialogTitle><DialogDescription>Registro simulado de CECUV—Cloud · ESIS 2026.</DialogDescription></DialogHeader><div className="export-options"><Button onClick={downloadCSV}><FileSpreadsheet/> Descargar hoja de cálculo CSV</Button><Button variant="outline" onClick={downloadCertificatePDF}><FileDown/> Certificado Oficial PDF</Button></div></DialogContent></Dialog>
         <Button variant="outline" onClick={downloadCSV}><FileSpreadsheet/> Descargar registro CSV</Button>
       </article>
     </div>
@@ -560,14 +574,16 @@ function CecuvGuide() {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const go = (i: number) => {
+    const target = guideSteps[i];
+    if (!target) return;
     setStep(i);
-    document.getElementById(guideSteps[i]![0])?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById(target[0])?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  const s = guideSteps[step]!;
+  const s = guideSteps[step] ?? guideSteps[0];
   const last = step === guideSteps.length - 1;
   return <div className="guide-widget">
     {open ? <div className="guide-card" role="dialog" aria-label="CECUV—Guide">
-      <div className="guide-top"><b><Sparkles/> CECUV—Guide</b><button aria-label="Cerrar" onClick={() => setOpen(false)}><X/></button></div>
+      <div className="guide-top"><b><Sparkles/> CECUV—Guide</b><Button variant="ghost" size="icon" aria-label="Cerrar recorrido" onClick={() => setOpen(false)}><X/></Button></div>
       <small>PASO {step + 1} / {guideSteps.length}</small>
       <div className="guide-progress"><span style={{ width: `${((step + 1) / guideSteps.length) * 100}%` }}/></div>
       <h4>{s[1]}</h4><p>{s[2]}</p>
@@ -580,7 +596,7 @@ function CecuvGuide() {
           <Button size="sm" onClick={() => go(step + 1)}>Siguiente <ChevronRight/></Button>
         </>}
       </div>
-    </div> : <button className="guide-launcher" onClick={() => { setOpen(true); go(0); }}><Play/> Iniciar Recorrido Interactivo</button>}
+    </div> : <Button className="guide-launcher" aria-label="Iniciar Recorrido Interactivo" onClick={() => { setOpen(true); go(0); }}><Play/><span>Iniciar Recorrido Interactivo</span></Button>}
   </div>;
 }
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Droplets, ShieldCheck, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const steps = [
   { icon: Droplets, emoji: "💧", title: "Captura del Agua", tone: "emerald", text: "El efluente contaminado de curtiembres ingresa a la cámara y se deposita en el vaso de ensayo, donde fluye en agitación antes de entrar en contacto con el fotocatalizador TiO₂.", visual: "flow" },
@@ -13,7 +14,7 @@ export function HowItWorksSection() {
     <div className="section-heading"><small>00 / ¿CÓMO FUNCIONA?</small><h2>¿Cómo funciona la CECUV?</h2><p>Tres pasos sencillos para entender cómo la luz limpia el agua.</p></div>
     <div className="hiw-grid">
       {steps.map((s, i) => { const Icon = s.icon; return (
-        <button key={s.title} className={`hiw-card ${s.tone} ${active === i ? "active" : ""}`} onClick={() => setActive(i)} onMouseEnter={() => setActive(i)}>
+        <Button variant="outline" key={s.title} className={`hiw-card ${s.tone} ${active === i ? "active" : ""}`} onClick={() => setActive(i)} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} aria-pressed={active === i}>
           <div className="hiw-head"><span className="hiw-num">PASO {i + 1}</span><Icon/></div>
           <div className={`hiw-visual ${s.visual}`} aria-hidden>
             {s.visual === "flow" && <><i/><i/><i/><i/></>}
@@ -22,7 +23,7 @@ export function HowItWorksSection() {
           </div>
           <h3>{s.emoji} {s.title}</h3>
           <p>{s.text}</p>
-        </button>
+        </Button>
       ); })}
     </div>
   </div></section>;
