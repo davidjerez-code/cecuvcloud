@@ -13,3 +13,6 @@
 - [x] Añadir CECUV—Guide con recorrido interactivo de 5 pasos
 - [x] Añadir metodología experimental de 10 pasos en Educación
 - [x] Verificar navegación, descargas, modal, simulador y tour
+- [ ] Restablecer modal de exportación, sugerencias del chat y escala cinética
+- [ ] Corregir QR y detalles visuales móviles
+- [ ] Verificar recorrido, documentos, chat y seguridad en escritorio y móvil
