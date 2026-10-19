@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { Calculator } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { educationalEstimate } from "@/lib/cecuv-simulation";
 
 export function UvCalculatorSimulator() {
   const [liters, setLiters] = useState(1);
   const [conc, setConc] = useState(50);
-  // Estimación didáctica: base 45 min, aumenta con volumen y concentración, tope 90 min por ciclo.
-  const raw = 45 + (liters - 0.5) * 9 + (conc - 10) * 0.25;
-  const minutes = Math.round(Math.min(90, Math.max(45, raw)));
-  const cycles = Math.max(1, Math.ceil(raw / 90));
-  const k = 0.03 * (50 / (conc + 25));
-  const reduction = Math.min(98, (1 - Math.exp(-k * minutes * 1.4)) * 100);
+  const { minutes, cycles, reduction } = educationalEstimate(liters, conc);
   return <div className="calc-box metric-card">
     <div className="card-top"><span><Calculator/> MINI-SIMULADOR CECUV</span><small className="badge">Estimación</small></div>
     <label className="calc-row"><span>Volumen a tratar <b>{liters.toFixed(1)} L</b></span>
