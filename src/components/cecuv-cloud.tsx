@@ -344,7 +344,7 @@ function LineChart({ values, secondary, fixedScale = false }: { values: number[]
 
 function AppHeader({ dark, toggleDark }: { dark: boolean; toggleDark: () => void }) {
   const [open, setOpen] = useState(false);
-  const nav = [["Inicio","inicio"],["Educación","educacion"],["Telemetría IoT","telemetria"],["Viabilidad","viabilidad"],["Equipo","equipo"],["CECUV—Bot","bot-guia"]] as const;
+  const nav = [["Inicio","inicio"],["Educación","educacion"],["Telemetría IoT","telemetria"],["Viabilidad","viabilidad"],["Equipo","equipo"],["CECUV—Bot","bot-guia"],["Preguntas frecuentes","faq"]] as const;
   const go = (id:string) => { document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); setOpen(false); };
   return <header className="app-header"><div className="header-inner">
     <button className="brand" onClick={()=>go("inicio")} aria-label="Ir al inicio"><span className="brand-symbol"><Atom /></span><span><b>CECUV</b><em>Cloud</em><small>LABORATORIO ABIERTO · IoT</small></span></button>
@@ -478,6 +478,7 @@ function Dashboard() {
         <Button variant="outline" onClick={downloadCSV}><FileSpreadsheet/> Descargar registro CSV</Button>
       </article>
     </div>
+    <div id="estimador" className="telemetry-estimator"><UvCalculatorSimulator /></div>
   </div></section>;
 }
 
@@ -553,7 +554,7 @@ export function CecuvCloud() {
       <ProblemContextSection />
       <Education />
       <Dashboard />
-      <section id="faq" className="section-band"><div className="container"><div className="faq-layout"><FaqAccordion /><UvCalculatorSimulator /></div></div></section>
+      <section id="faq" className="section-band"><div className="container"><FaqAccordion /></div></section>
       <Viability />
       <TeamAndAcknowledgements />
     </main>

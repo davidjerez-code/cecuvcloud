@@ -144,6 +144,9 @@ function normalize(text: string) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/₂/g, "2")
+    .replace(/cr\s*\(\s*vi\s*\)/g, "crvi")
+    .replace(/cr\s*\(\s*iii\s*\)/g, "criii")
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -167,7 +170,7 @@ export function answerQuestion(question: string): BotReply {
     };
   }
 
-  if (/^(hola|buenas|buenos dias|buenas tardes|hey|saludos|que tal)\b/.test(raw)) {
+  if (/^(hola|buenas|buenos dias|buenas tardes|hey|saludos|que tal)[\s]*$/.test(raw)) {
     return { 
       text: "Hola, soy CECUV—Bot. Consulto la matriz de conocimiento del trabajo escrito del Semillero OPENIN (UCC - ESIS 2026). Pregúnteme por la toxicidad del Cr(VI), la fotocatálisis con TiO₂/UV-A, la estructura física de la cabina, la telemetría ESP32, el diseño de experimentos (DoE) o los costos de fabricación.", 
       topics: [] 
@@ -178,7 +181,8 @@ export function answerQuestion(question: string): BotReply {
     .map((entry) => {
       let score = 0;
       for (const key of entry.keywords) {
-        if (raw.includes(key)) score += key.length > 4 ? 3.5 : 2.5;
+        const normalizedKey = normalize(key);
+        if (` ${raw} `.includes(` ${normalizedKey} `)) score += normalizedKey.length > 4 ? 3.5 : 2.5;
       }
       for (const word of words) {
         if (entry.keywords.some((k) => k.startsWith(word) || word.startsWith(k))) score += 1.2;
@@ -197,7 +201,9 @@ export function answerQuestion(question: string): BotReply {
     };
   }
 
-  const top = scored.length > 1 && scored[1]!.score >= scored[0]!.score * 0.8 ? scored.slice(0, 2) : scored.slice(0, 1);
+  const first = scored[0];
+  const second = scored[1];
+  const top = first && second && second.score >= first.score * 0.8 ? scored.slice(0, 2) : scored.slice(0, 1);
   const text = top.map((s) => s.entry.answer).join("\n\n");
   return { text, topics: top.map((s) => s.entry.topic) };
 }

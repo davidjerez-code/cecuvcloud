@@ -298,6 +298,12 @@ html{scroll-behavior:smooth}
 .calc-box .card-top svg{width:18px;height:18px;flex:none;color:var(--primary)}
 .calc-box .badge{white-space:nowrap}
 .calc-box .metric-footer{margin:0;font-size:12px;line-height:1.6;color:var(--muted-foreground)}
+.telemetry-estimator{margin-top:24px;border-top:1px solid var(--border);padding-top:24px}
+.telemetry-estimator .calc-box{padding:0;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.telemetry-estimator .card-top,.telemetry-estimator .calc-bar,.telemetry-estimator .metric-footer{grid-column:1/-1}
+.telemetry-estimator .calc-results{grid-column:1/-1}
+#estimador,#faq{scroll-margin-top:96px}
+@media(max-width:760px){.telemetry-estimator .calc-box{grid-template-columns:1fr}.education-grid{grid-template-columns:1fr}}
 .guide-card{max-height:calc(100dvh - 110px);overflow-y:auto;border-radius:8px;box-shadow:0 20px 50px -20px var(--stage-shadow)}
 .guide-launcher{height:auto;white-space:normal}
 .bot-head>div{min-width:0}.bot-tag{white-space:normal;text-align:center}
