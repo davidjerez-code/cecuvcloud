@@ -1,3 +1,5 @@
+import { researchTeam, researchMentor } from "./cecuv-team";
+
 // Base de conocimiento del trabajo escrito CECUV (Semillero OPENIN — UCC, ESIS 2026)
 // Usada por CECUV-Bot para responder preguntas libres del usuario.
 
@@ -9,6 +11,10 @@ export type KnowledgeEntry = {
 };
 
 export const knowledgeBase: KnowledgeEntry[] = [
+  ...researchTeam.map(person => ({ id: `person-${person.id}`, topic: person.name, keywords: [person.id, ...person.name.split(" ")], answer: `${person.name} es estudiante de ${person.career} de la Universidad Cooperativa de Colombia (Campus Bogotá) e integrante del Semillero de Investigación OPENIN y del equipo investigador de CECUV—Cloud. Su participación forma parte del trabajo interdisciplinario del proyecto.` })),
+  { id: "mentor", topic: researchMentor, keywords: ["pablo", "profesor", "docente", "velasquez", "lider", "mentoria"], answer: `${researchMentor} es profesor e investigador de la Universidad Cooperativa de Colombia (Campus Bogotá) y líder del Semillero OPENIN. El equipo reconoce su guía, mentoría y acompañamiento académico, científico y personal en el desarrollo de CECUV.` },
+  { id: "treatment-time", topic: "Tiempo de tratamiento", keywords: ["cuanto tarda", "cuanto tiempo", "duracion", "45", "90", "tiempo de tratamiento"], answer: "Como referencia educativa, el tratamiento se estima entre 45 y 90 minutos por ciclo. No es un resultado garantizado: depende del volumen, la concentración inicial de Cr(VI), la dosis de TiO₂ y la intensidad UV-A. La reducción debe verificarse mediante análisis del ensayo." },
+  { id: "component-life", topic: "Vida útil y reutilización", keywords: ["vida util", "duracion lamparas", "8000", "horas", "reutilizable", "reutilizar", "reutiliza", "dura", "duran"], answer: "La referencia de vida útil de las lámparas UV es de 8000 horas o más, según el fabricante y las condiciones de operación. Debe comprobarse su intensidad y sustituirlas cuando pierdan rendimiento. El TiO₂ puede recuperarse y reutilizarse si se valida su actividad; las muestras y residuos con cromo requieren manejo seguro y no deben verterse al desagüe." },
   {
     id: "cr6-riesgo",
     topic: "Cromo hexavalente Cr(VI)",
@@ -127,7 +133,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
     id: "openin",
     topic: "Semillero OPENIN y Ponencia ESIS 2026",
     keywords: ["openin", "semillero", "equipo", "autor", "autores", "integrante", "integrantes", "quien", "quienes", "universidad", "cooperativa", "ucc", "indesco", "esis", "encuentro", "bogota", "campus", "2026", "institucion", "ponencia", "fecha"],
-    answer: "El proyecto pertenece al Semillero de Investigación OPENIN de la Universidad Cooperativa de Colombia (UCC, Campus Bogotá). Se presenta en el VI Encuentro ESIS 2026 bajo el eje de Sostenibilidad Ambiental y Desarrollo Tecnológico. Autores: John Alejandro Almanza Valderrama, Andrés Felipe Leguizamón Rodríguez, David Stiven Jerez Díaz y Sara Valentina Quintana.",
+    answer: "El proyecto pertenece al Semillero de Investigación OPENIN de la Universidad Cooperativa de Colombia (UCC, Campus Bogotá). Se presenta en el VI Encuentro ESIS 2026 bajo el eje de Sostenibilidad Ambiental y Desarrollo Tecnológico. Autores: John Alejandro Almanza Valderrama, Andrés Felipe Leguizamón Rodríguez, David Stiven Jerez Díaz y Sara Valentina Quintana López. John, Andrés y David estudian Ingeniería Industrial; Sara estudia Ingeniería de Sistemas. El líder docente es Pablo Elías Velásquez Perilla.",
   },
   {
     id: "cecuv-general",
@@ -175,6 +181,12 @@ export function answerQuestion(question: string): BotReply {
       text: "Hola, soy CECUV—Bot. Consulto la matriz de conocimiento del trabajo escrito del Semillero OPENIN (UCC - ESIS 2026). Pregúnteme por la toxicidad del Cr(VI), la fotocatálisis con TiO₂/UV-A, la estructura física de la cabina, la telemetría ESP32, el diseño de experimentos (DoE) o los costos de fabricación.", 
       topics: [] 
     };
+  }
+
+  const namedPeople = researchTeam.filter(person => ` ${raw} `.includes(` ${person.id} `) || normalize(person.name).split(" ").some(name => name.length > 4 && ` ${raw} `.includes(` ${name} `)));
+  if (namedPeople.length) {
+    const entries = knowledgeBase.filter(entry => namedPeople.some(person => entry.id === `person-${person.id}`));
+    return { text: entries.map(entry => entry.answer).join("\n\n"), topics: entries.map(entry => entry.topic) };
   }
 
   const scored = knowledgeBase

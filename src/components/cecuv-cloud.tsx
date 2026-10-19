@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { ProblemContextSection } from "@/components/ProblemContextSection";
-import { FaqAccordion } from "@/components/FaqAccordion";
+import { CecuvChatbot } from "@/components/CecuvChatbot";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UvCalculatorSimulator } from "@/components/UvCalculatorSimulator";
 import { TeamAndAcknowledgements } from "@/components/TeamAndAcknowledgements";
 import {
@@ -13,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { answerQuestion } from "@/lib/cecuv-knowledge";
+
 import { QRCodeSVG } from "qrcode.react";
 import { kineticConcentration, operatingOutputs } from "@/lib/cecuv-simulation";
 
@@ -62,77 +63,6 @@ const methodologySteps = [
   ["09", "Seguimiento analítico", "Toma de alícuotas para estimar remoción de Cr(VI) y desempeño del proceso."],
   ["10", "Análisis cinético", "Ajuste de la curva C/C0 = e^(-k·t), eficiencia y comparación de escenarios DoE."],
 ] as const;
-
-type ChatTurn = { role: "user" | "bot"; text: string; topics?: string[] };
-
-const botChips = ["¿Por qué el Cr(VI) es peligroso?", "Simular reacción TiO₂ + UV-A", "¿Cómo funciona el Interlock?", "Sensores ESP32 / DHT22", "¿Cuál es la ventaja económica?", "Metodología del ensayo"];
-
-function BotAnswer({ text, animate }: { text: string; animate: boolean }) {
-  const [shown, setShown] = useState(animate ? 0 : text.length);
-  useEffect(() => {
-    if (!animate) return;
-    let n = 0;
-    const id = setInterval(() => { n += 6; setShown(Math.min(n, text.length)); if (n >= text.length) clearInterval(id); }, 16);
-    return () => clearInterval(id);
-  }, [text, animate]);
-  const visible = text.slice(0, shown);
-  const paragraphs = visible.split("\n\n");
-  return <>{paragraphs.map((para, pi) => {
-    const parts = para.split(/(?<=[.:])\s+(?=[A-ZÁÉÍÓÚÑ¿])/).filter(Boolean);
-    if (parts.length < 2) return <p key={pi}>{para}</p>;
-    return <ul key={pi} className="bot-bullets">{parts.map((s, si) => <li key={si}><CheckCircle2/><span>{s}</span></li>)}</ul>;
-  })}{shown < text.length && <span className="bot-caret"/>}</>;
-}
-
-function BotPanel() {
-  const [input, setInput] = useState("");
-  const [thinking, setThinking] = useState(false);
-  const [chat, setChat] = useState<ChatTurn[]>([
-    { role: "bot", text: "Hola, soy CECUV—Bot v2.0. Consulto la matriz de conocimiento del trabajo escrito del Semillero OPENIN. Pregúnteme sobre Cr(VI), fotocatálisis, sensores ESP32/DHT22, costos o metodología." },
-  ]);
-  const logRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const el = logRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [chat, thinking]);
-
-  function send(question: string) {
-    const q = question.trim();
-    if (!q || thinking) return;
-    setChat((prev) => [...prev, { role: "user", text: q }]);
-    setInput("");
-    setThinking(true);
-    setTimeout(() => {
-      const reply = answerQuestion(q);
-      setChat((prev) => [...prev, { role: "bot", text: reply.text, topics: reply.topics }]);
-      setThinking(false);
-    }, 650);
-  }
-
-  return <div className="bot-panel bot-v2">
-    <div className="bot-head">
-      <span className="bot-avatar"><Bot/></span>
-      <div><h3>CECUV—Bot v2.0</h3><small className="bot-online"><i/> MATRIZ OPENIN</small></div>
-      <em className="bot-tag">Semillero OPENIN</em>
-    </div>
-    <div className="bot-log" ref={logRef} aria-live="polite">
-      {chat.map((turn, i) => turn.role === "user"
-        ? <div key={i} className="bot-turn user"><p>{turn.text}</p></div>
-        : <div key={i} className="bot-turn"><span className="bot-icon"><Sparkles/></span><div className="bot-bubble">
-            <BotAnswer text={turn.text} animate={i > 0 && i === chat.length - 1}/>
-            {turn.topics && turn.topics.length > 0 && <div className="bot-topics">{turn.topics.map((t) => <span key={t}><Atom/> {t}</span>)}</div>}
-          </div></div>)}
-      {thinking && <div className="bot-turn"><span className="bot-icon"><Sparkles/></span><div className="bot-bubble bot-typing"><i/><i/><i/></div></div>}
-    </div>
-    <div className="bot-prompts">{botChips.map((p) => <Button variant="outline" key={p} type="button" onClick={() => { setInput(p); inputRef.current?.focus(); }}>{p}</Button>)}</div>
-    <form className="bot-form" onSubmit={(e) => { e.preventDefault(); send(input); }}>
-      <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Escriba su pregunta…" aria-label="Pregunta para CECUV-Bot"/>
-      <Button type="submit" size="icon" aria-label="Enviar pregunta" disabled={thinking || !input.trim()}><ChevronRight/></Button>
-    </form>
-  </div>;
-}
 
 function MiniLogo({ label }: { label: string }) {
   return <div className="institution-mark" aria-label={label}><span>{label}</span></div>;
@@ -344,11 +274,11 @@ function LineChart({ values, secondary, fixedScale = false }: { values: number[]
 
 function AppHeader({ dark, toggleDark }: { dark: boolean; toggleDark: () => void }) {
   const [open, setOpen] = useState(false);
-  const nav = [["Inicio","inicio"],["Educación","educacion"],["Telemetría IoT","telemetria"],["Viabilidad","viabilidad"],["Equipo","equipo"],["CECUV—Bot","bot-guia"],["Preguntas frecuentes","faq"]] as const;
-  const go = (id:string) => { document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); setOpen(false); };
+  const nav = [["Inicio","inicio"],["Educación","educacion"],["Telemetría IoT","telemetria"],["Viabilidad","viabilidad"],["Equipo","equipo"],["CECUV—Bot","bot-guia"]] as const;
+  const go = (id:string) => { document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); if (id === "bot-guia") document.querySelector<HTMLInputElement>(".bot-form input")?.focus({ preventScroll: true }); setOpen(false); };
   return <header className="app-header"><div className="header-inner">
     <button className="brand" onClick={()=>go("inicio")} aria-label="Ir al inicio"><span className="brand-symbol"><Atom /></span><span><b>CECUV</b><em>Cloud</em><small>LABORATORIO ABIERTO · IoT</small></span></button>
-    <nav className={open?"open":""} aria-label="Navegación principal">{nav.map(([label,id])=><button key={id} onClick={()=>go(id)}>{label}</button>)}</nav>
+    <nav className={open?"open":""} aria-label="Navegación principal">{nav.map(([label,id])=><Button variant="ghost" key={id} onClick={()=>go(id)}>{id === "bot-guia" && <Bot/>}{label}</Button>)}</nav>
     <div className="header-tools"><Button variant="outline" size="icon" onClick={toggleDark} title={dark?"Modo claro":"Modo oscuro"}>{dark?<Sun/>:<Moon/>}</Button>
       <Dialog><DialogTrigger asChild><Button variant="outline" size="icon" title="Desplegar QR" aria-label="Desplegar QR"><QrCode/></Button></DialogTrigger><DialogContent className="qr-dialog"><DialogHeader><DialogTitle>CECUV-Cloud móvil</DialogTitle><DialogDescription>Escanee para abrir la plataforma desde otro dispositivo.</DialogDescription></DialogHeader><QrPattern/><code>{PLATFORM_URL}</code></DialogContent></Dialog>
       <Button variant="outline" size="icon" className="menu-button" onClick={()=>setOpen(!open)} aria-label="Abrir menú">{open?<X/>:<Menu/>}</Button>
@@ -363,7 +293,7 @@ function Hero() {
     <div className="eyebrow"><span className="status-pulse"/> SISTEMA ABIERTO DE MONITORIZACIÓN IoT</div>
     <h1>CECUV<span>—Cloud</span></h1><h2>Cabina Experimental de Control UV</h2>
     <p>Digitalización IoT al servicio de la sostenibilidad ambiental y la descontaminación del agua.</p>
-    <div className="hero-actions"><Button size="lg" onClick={()=>document.getElementById("prototipo")?.scrollIntoView({behavior:"smooth"})}><Box/> Explorar prototipo 3D</Button><Button size="lg" variant="outline" onClick={()=>document.getElementById("telemetria")?.scrollIntoView({behavior:"smooth"})}><Activity/> Dashboard en vivo</Button></div>
+    <div className="hero-actions"><Button size="lg" onClick={()=>document.getElementById("prototipo")?.scrollIntoView({behavior:"smooth"})}><Box/> Explorar prototipo 3D</Button><Button size="lg" variant="outline" onClick={() => { document.getElementById("bot-guia")?.scrollIntoView({ behavior: "smooth" }); document.querySelector<HTMLInputElement>(".bot-form input")?.focus({ preventScroll: true }); }}><Bot/> Consultar a CECU-Bot</Button><Button size="lg" variant="outline" onClick={()=>document.getElementById("telemetria")?.scrollIntoView({behavior:"smooth"})}><Activity/> Dashboard en vivo</Button></div>
     <div className="hero-links"><button onClick={()=>window.print()}><FileDown/> Póster ESIS 2026</button><a href={WRITTEN_WORK_PDF} download="CABINA_EXPERIMENTAL_DE_CONTROL_UV_ESIS2026.pdf"><FileDown/> Trabajo Escrito ESIS 2026 PDF</a><button onClick={()=>document.getElementById("educacion")?.scrollIntoView({behavior:"smooth"})}><GraduationCap/> Ver resumen extenso</button></div>
     <div className="institution-row"><MiniLogo label="UCC"/><MiniLogo label="INDESCO"/><MiniLogo label="OPENIN"/><MiniLogo label="ESIS 2026"/></div>
   </div><div id="prototipo" className="hero-model"><Cabinet active={active} setActive={setActive}/><div className="hotspot-card"><span>{String(active+1).padStart(2,"0")}</span><div><small>COMPONENTE TÉCNICO</small><h3>{activeHotspot[0]}</h3><p>{activeHotspot[1]}</p></div></div></div></div>
@@ -378,7 +308,7 @@ function Education() {
     <div className="education-grid"><div className="research-column"><div className="research-cards">
       <article className="info-card"><div className="card-icon danger"><AlertTriangle/></div><small>PROBLEMÁTICA</small><h3>Cromo Hexavalente · Cr(VI)</h3><p>Contaminante altamente tóxico presente en efluentes de curtiembres, galvanoplastia y pigmentos.</p><div className="metric-line"><b>0,05 mg/L</b><span>Límite máximo recomendado por OMS</span></div></article>
       <article className="info-card"><div className="card-icon"><FlaskConical/></div><small>ENFOQUE</small><h3>Procesos de Oxidación Avanzada</h3><p>Fotocatálisis heterogénea TiO₂/UV-A para estandarizar ensayos y reducir el ruido experimental.</p><div className="tag-row"><span>TiO₂</span><span>UV-A 365 nm</span><span>PAO</span></div></article>
-    </div><MethodologyDialog/><div id="bot-guia"><BotPanel/></div></div>
+    </div><MethodologyDialog/><div id="bot-guia"><CecuvChatbot/></div></div>
     <div className="doe-panel"><div className="panel-label"><span><Gauge/> SIMULADOR DoE</span><i>PROYECCIÓN TEÓRICA</i></div><h3>Diseñe su ensayo fotocatalítico</h3><p>Ajuste las condiciones y observe la cinética estimada de remoción.</p>
       <div className="control"><label><span>Concentración de TiO₂</span><b>{tio.toFixed(1)} g/L</b></label><Slider min={0.5} max={2} step={0.1} value={[tio]} onValueChange={v=>setTio(v[0] ?? tio)}/><div><span>0.5</span><span>2.0</span></div></div>
       <div className="control"><label><span>Tiempo de exposición</span><b>{time} min</b></label><Slider min={0} max={120} step={5} value={[time]} onValueChange={v=>setTime(v[0] ?? time)}/><div><span>0</span><span>120</span></div></div>
@@ -457,6 +387,7 @@ function Dashboard() {
       </div>
     </div>
 
+    <Tabs defaultValue="monitor" className="telemetry-tabs"><TabsList aria-label="Panel de telemetría"><TabsTrigger value="monitor"><Activity/> Monitoreo en vivo</TabsTrigger><TabsTrigger value="estimate"><Gauge/> Estimación de tratamiento</TabsTrigger></TabsList><TabsContent value="monitor">
     <div className="metrics-6">
       <article className={`metric-card ${temp > 35 ? "warn" : ""}`}><div className="card-top"><span><Thermometer/> TEMPERATURA INTERNA</span><small className="badge">Límite 35 °C</small></div><div className="metric-value"><strong>{temp.toFixed(1)}<sup>°C</sup></strong></div><p className="metric-footer">Sensor DHT22 · ventilación activa</p></article>
       <article className="metric-card"><div className="card-top"><span><Droplets/> HUMEDAD RELATIVA</span><small className="badge">DHT22</small></div><div className="metric-value"><strong>{humidity.toFixed(1)}<sup>%</sup></strong></div><p className="metric-footer">Ambiente interno de la cámara</p></article>
@@ -478,7 +409,7 @@ function Dashboard() {
         <Button variant="outline" onClick={downloadCSV}><FileSpreadsheet/> Descargar registro CSV</Button>
       </article>
     </div>
-    <div id="estimador" className="telemetry-estimator"><UvCalculatorSimulator /></div>
+    </TabsContent><TabsContent value="estimate" forceMount className="telemetry-estimator" id="estimador"><UvCalculatorSimulator /></TabsContent></Tabs>
   </div></section>;
 }
 
@@ -554,7 +485,6 @@ export function CecuvCloud() {
       <ProblemContextSection />
       <Education />
       <Dashboard />
-      <section id="faq" className="section-band"><div className="container"><FaqAccordion /></div></section>
       <Viability />
       <TeamAndAcknowledgements />
     </main>
