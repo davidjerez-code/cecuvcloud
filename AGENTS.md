@@ -11,3 +11,4 @@
 
 - Keep simulated kinetic and safety calculations in the browser-safe simulation module so UI and exports share the same rules.
 - Generate the public platform QR with qrcode.react rather than decorative patterns so it remains scannable.
+- Keep the educational volume/concentration estimator in the telemetry section, separate from operating controls, so projections cannot change the simulated safety state.

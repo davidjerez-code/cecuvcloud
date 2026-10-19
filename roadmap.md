@@ -16,3 +16,5 @@
 - [x] Restablecer modal de exportación, sugerencias del chat y escala cinética
 - [x] Corregir QR y detalles visuales móviles
 - [x] Verificar recorrido, documentos, chat y seguridad en escritorio y móvil
+- [ ] Integrar el mini-simulador en telemetría y revisar accesos rápidos
+- [ ] Mejorar coincidencias de CECUV—Bot y verificar respuestas y exportaciones
