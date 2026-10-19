@@ -1,18 +1,14 @@
 import { GraduationCap, Heart, Quote } from "lucide-react";
 
-const team = [
-  ["JA", "John Alejandro Almanza Valderrama", "Estudiante de Ingeniería Industrial"],
-  ["AL", "Andrés Felipe Leguizamón Rodríguez", "Estudiante de Ingeniería Industrial"],
-  ["DJ", "David Stiven Jerez Díaz", "Estudiante de Ingeniería Industrial"],
-  ["SQ", "Sara Valentina Quintana López", "Estudiante de Ingeniería de Sistemas"],
-] as const;
+import { researchTeam } from "@/lib/cecuv-team";
+import placeholder from "@/assets/team-placeholder.svg";
 
 export function TeamAndAcknowledgements() {
   return <section id="equipo" className="section-band"><div className="container">
     <div className="section-heading"><small>04 / EQUIPO</small><h2>Equipo Investigador</h2><p>Semillero de Investigación OPENIN · Universidad Cooperativa de Colombia</p></div>
     <div className="team-grid">
-      {team.map(([ini, name, career]) => <article key={name} className="team-card">
-        <div className="avatar">{ini}</div><h3>{name}</h3><p>{career}</p><p>UCC Campus Bogotá</p><small>Semillero OPENIN</small>
+      {researchTeam.map(({ name, career, photoUrl }) => <article key={name} className="team-card">
+        <div className="avatar"><img src={photoUrl || placeholder} alt={`Perfil de ${name}${photoUrl ? "" : " — foto pendiente"}`} onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = placeholder; }}/></div><h3>{name}</h3><p>Estudiante de {career}</p><p>UCC Campus Bogotá</p><small>Semillero OPENIN</small>
       </article>)}
     </div>
 

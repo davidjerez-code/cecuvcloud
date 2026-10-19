@@ -12,3 +12,6 @@
 - Keep simulated kinetic and safety calculations in the browser-safe simulation module so UI and exports share the same rules.
 - Generate the public platform QR with qrcode.react rather than decorative patterns so it remains scannable.
 - Keep the educational volume/concentration estimator in the telemetry section, separate from operating controls, so projections cannot change the simulated safety state.
+
+- Share researcher identities and optional photo URLs from the browser-safe team module so chatbot and profile cards stay consistent.
+- Keep the chatbot in its own React component and integrate telemetry estimates through an independent tab; retain TanStack file routes rather than adding a second page router.
