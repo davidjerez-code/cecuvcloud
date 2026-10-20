@@ -7,8 +7,10 @@ export function TeamAndAcknowledgements() {
   return <section id="equipo" className="section-band"><div className="container">
     <div className="section-heading"><small>04 / EQUIPO</small><h2>Equipo Investigador</h2><p>Semillero de Investigación OPENIN · Universidad Cooperativa de Colombia</p></div>
     <div className="team-grid">
-      {researchTeam.map(({ name, career, photoUrl }) => <article key={name} className="team-card">
-        <div className="avatar"><img src={photoUrl || placeholder} alt={`Perfil de ${name}${photoUrl ? "" : " — foto pendiente"}`} onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = placeholder; }}/></div><h3>{name}</h3><p>Estudiante de {career}</p><p>UCC Campus Bogotá</p><small>Semillero OPENIN</small>
+      {researchTeam.map(({ name, career, photoUrl, initials }) => <article key={name} className="team-card">
+        <div className="avatar team-photo">{photoUrl
+          ? <img src={photoUrl} alt={`Foto de ${name}`} loading="lazy" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = placeholder; }}/>
+          : <span className="team-initials" role="img" aria-label={`${name} — foto pendiente`}>{initials}</span>}</div><h3>{name}</h3><p>Estudiante de {career}</p><p>UCC Campus Bogotá</p><small>Semillero OPENIN</small>
       </article>)}
     </div>
 
