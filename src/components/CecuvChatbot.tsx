@@ -5,6 +5,7 @@ import { answerQuestion } from "@/lib/cecuv-knowledge";
 
 type ChatTurn = { role: "user" | "bot"; text: string; topics?: string[] };
 
+const quickPrompts = ["💡 ¿Cómo funciona el interlock?", "👨‍🔬 ¿Quiénes integran el semillero OPENIN?", "⏱️ ¿Cuánto tarda la descontaminación?"];
 const botChips = ["¿Por qué el Cr(VI) es peligroso?", "Simular reacción TiO₂ + UV-A", "¿Cómo funciona el Interlock?", "Sensores ESP32 / DHT22", "¿Cuál es la ventaja económica?", "Metodología del ensayo"];
 
 function BotAnswer({ text, animate }: { text: string; animate: boolean }) {
@@ -66,6 +67,7 @@ export function CecuvChatbot() {
           </div></div>)}
       {thinking && <div className="bot-turn"><span className="bot-icon"><Sparkles/></span><div className="bot-bubble bot-typing"><i/><i/><i/></div></div>}
     </div>
+    <div className="bot-prompts bot-quick">{quickPrompts.map((p) => <Button variant="outline" key={p} type="button" disabled={thinking} onClick={() => send(p.replace(/^\S+\s/, ""))}>{p}</Button>)}</div>
     <div className="bot-prompts">{botChips.map((p) => <Button variant="outline" key={p} type="button" onClick={() => { setInput(p); inputRef.current?.focus(); }}>{p}</Button>)}</div>
     <form className="bot-form" onSubmit={(e) => { e.preventDefault(); send(input); }}>
       <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Escriba su pregunta…" aria-label="Pregunta para CECUV-Bot"/>

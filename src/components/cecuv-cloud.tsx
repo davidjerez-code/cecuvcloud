@@ -7,7 +7,7 @@ import { UvCalculatorSimulator } from "@/components/UvCalculatorSimulator";
 import { TeamAndAcknowledgements } from "@/components/TeamAndAcknowledgements";
 import {
   Activity, AlertTriangle, Atom, Bot, Box, CheckCircle2, ChevronRight,
-  ClipboardList, Clock3, Download, Droplets, FileDown, FileSpreadsheet, FlaskConical, Gauge, GraduationCap,
+  ClipboardList, Clock3, Download, Droplets, FileDown, FileText, FileSpreadsheet, FlaskConical, Gauge, GraduationCap,
   Heart, Leaf, Menu, Moon, Play, QrCode, RotateCcw, ShieldCheck, Sparkles,
   Sun, Thermometer, Users, Wind, X, Zap
 } from "lucide-react";
@@ -49,7 +49,10 @@ const quickPrompts = [
   "¿Cuál es la ventaja económica?",
 ];
 
-const WRITTEN_WORK_PDF = "/downloads/CABINA_EXPERIMENTAL_DE_CONTROL_UV_ESIS2026.pdf";
+const WRITTEN_WORK_PDF = "/documents/trabajo-escrito-esis-2026.pdf";
+const POSTER_PDF = "/documents/poster-esis-2026.pdf";
+// Editable: enlace externo al modelado 3D
+const MODEL_3D_URL = "https://cecuvcloud.lovable.app/#prototipo";
 
 const methodologySteps = [
   ["01", "Toma de muestras", "Recolección controlada del efluente con rotulado, preservación y cadena básica de custodia."],
@@ -294,7 +297,7 @@ function Hero() {
     <h1>CECUV<span>—Cloud</span></h1><h2>Cabina Experimental de Control UV</h2>
     <p>Digitalización IoT al servicio de la sostenibilidad ambiental y la descontaminación del agua.</p>
     <div className="hero-actions"><Button size="lg" onClick={()=>document.getElementById("prototipo")?.scrollIntoView({behavior:"smooth"})}><Box/> Explorar prototipo 3D</Button><Button size="lg" variant="outline" onClick={() => { document.getElementById("bot-guia")?.scrollIntoView({ behavior: "smooth" }); document.querySelector<HTMLInputElement>(".bot-form input")?.focus({ preventScroll: true }); }}><Bot/> Consultar a CECU-Bot</Button><Button size="lg" variant="outline" onClick={()=>document.getElementById("telemetria")?.scrollIntoView({behavior:"smooth"})}><Activity/> Dashboard en vivo</Button></div>
-    <div className="hero-links"><button onClick={()=>window.print()}><FileDown/> Póster ESIS 2026</button><a href={WRITTEN_WORK_PDF} download="CABINA_EXPERIMENTAL_DE_CONTROL_UV_ESIS2026.pdf"><FileDown/> Trabajo Escrito ESIS 2026 PDF</a><button onClick={()=>document.getElementById("educacion")?.scrollIntoView({behavior:"smooth"})}><GraduationCap/> Ver resumen extenso</button></div>
+    <div className="hero-links"><a href={POSTER_PDF} download="Poster_ESIS_2026.pdf"><FileDown/> Póster ESIS 2026</a><a href={WRITTEN_WORK_PDF} download="Trabajo_Escrito_ESIS_2026.pdf"><FileText/> Trabajo Escrito ESIS 2026 PDF</a><a href={MODEL_3D_URL} target="_blank" rel="noopener noreferrer"><Box/> Simulación Modelado 3D</a><button onClick={()=>document.getElementById("educacion")?.scrollIntoView({behavior:"smooth"})}><GraduationCap/> Ver resumen extenso</button></div>
     <div className="institution-row"><MiniLogo label="UCC"/><MiniLogo label="INDESCO"/><MiniLogo label="OPENIN"/><MiniLogo label="ESIS 2026"/></div>
   </div><div id="prototipo" className="hero-model"><Cabinet active={active} setActive={setActive}/><div className="hotspot-card"><span>{String(active+1).padStart(2,"0")}</span><div><small>COMPONENTE TÉCNICO</small><h3>{activeHotspot[0]}</h3><p>{activeHotspot[1]}</p></div></div></div></div>
   <div className="congress-strip"><span>VI ENCUENTRO ESIS 2026</span><b>Sostenibilidad Ambiental</b><i/> <b>Desarrollo Tecnológico</b><span>Bogotá · Colombia</span></div></section>;
