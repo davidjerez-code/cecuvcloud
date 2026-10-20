@@ -353,3 +353,9 @@ html{scroll-behavior:smooth}
 .team-card:hover .avatar.team-photo img{transform:scale(1.05)}
 .team-initials{width:100%;height:100%;display:grid;place-items:center;font:700 26px var(--font-mono);color:var(--success);background:color-mix(in oklab,var(--success) 12%,var(--card));text-shadow:0 0 12px var(--success)}
 .team-card .avatar.team-photo:has(.team-initials){border-color:var(--success);box-shadow:0 0 18px color-mix(in oklab,var(--success) 45%,transparent)}
+.hero-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px;max-width:560px}
+.hero-links a,.hero-links button{background:color-mix(in oklab,var(--card) 90%,transparent);border:1px solid color-mix(in oklab,var(--primary) 30%,transparent);border-radius:12px;padding:10px 16px;transition:all .25s ease}
+.hero-links a:hover,.hero-links button:hover{background:color-mix(in oklab,var(--primary) 10%,var(--card));border-color:var(--primary);box-shadow:0 10px 24px -8px color-mix(in oklab,var(--primary) 35%,transparent);transform:translateY(-4px)}
+.info-card,.kpi-card,.team-card{transition:transform .25s ease,box-shadow .25s ease}
+.info-card:hover,.kpi-card:hover{transform:translateY(-4px)}
+@media(max-width:480px){.hero-links{grid-template-columns:1fr}}
