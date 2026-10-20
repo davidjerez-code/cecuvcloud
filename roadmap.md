@@ -18,5 +18,5 @@
 - [x] Verificar recorrido, documentos, chat y seguridad en escritorio y móvil
 - [x] Integrar el mini-simulador en telemetría y revisar accesos rápidos
 - [x] Mejorar coincidencias de CECUV—Bot y verificar respuestas y exportaciones
-- [ ] Aplicar refinamiento del archivo: bot, accesos, pestañas de telemetría y perfiles
-- [ ] Verificar consultas por persona, controles, seguridad y presentación adaptable
+- [x] Aplicar refinamiento del archivo: bot, accesos, pestañas de telemetría y perfiles
+- [x] Verificar consultas por persona, controles, seguridad y presentación adaptable
