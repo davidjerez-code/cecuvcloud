@@ -52,7 +52,7 @@ const quickPrompts = [
 const WRITTEN_WORK_PDF = "/documents/trabajo-escrito-esis-2026.pdf";
 const POSTER_PDF = "/documents/poster-esis-2026.pdf";
 // Editable: enlace externo al modelado 3D
-const MODEL_3D_URL = "https://cecuvcloud.lovable.app/#prototipo";
+const MODEL_3D_URL = "https://cad.onshape.com/documents/0c5c20d0cb4fe0b0f404d95f/w/c912699734b63f7779787b22/e/823fa6a4b29591f73f15b21a?renderMode=0&uiState=6ad7f10fa941be13c577d46c";
 
 const methodologySteps = [
   ["01", "Toma de muestras", "Recolección controlada del efluente con rotulado, preservación y cadena básica de custodia."],
@@ -68,7 +68,7 @@ const methodologySteps = [
 ] as const;
 
 function MiniLogo({ label }: { label: string }) {
-  return <div className="institution-mark" aria-label={label}><span>{label}</span></div>;
+  return <span className="institution-pill">{label}</span>;
 }
 
 function SectionHeading({ code, title, text }: { code: string; title: string; text: string }) {
@@ -82,7 +82,7 @@ function QrPattern() {
 function MethodologyDialog() {
   return <Dialog>
     <DialogTrigger asChild>
-      <Button variant="outline" className="method-trigger"><ClipboardList/> Metodología Experimental de 10 Pasos</Button>
+      <button type="button" className="method-banner"><span className="method-icon"><FlaskConical/></span><span><b>Metodología Experimental de 10 Pasos</b><small>Descubre el proceso detallado paso a paso para la fotocatálisis del Cr(VI)</small></span><ChevronRight className="method-arrow"/></button>
     </DialogTrigger>
     <DialogContent className="method-dialog">
       <DialogHeader>
@@ -296,9 +296,9 @@ function Hero() {
     <div className="eyebrow"><span className="status-pulse"/> SISTEMA ABIERTO DE MONITORIZACIÓN IoT</div>
     <h1>CECUV<span>—Cloud</span></h1><h2>Cabina Experimental de Control UV</h2>
     <p>Digitalización IoT al servicio de la sostenibilidad ambiental y la descontaminación del agua.</p>
-    <div className="hero-actions"><Button size="lg" onClick={()=>document.getElementById("prototipo")?.scrollIntoView({behavior:"smooth"})}><Box/> Explorar prototipo 3D</Button><Button size="lg" variant="outline" onClick={() => { document.getElementById("bot-guia")?.scrollIntoView({ behavior: "smooth" }); document.querySelector<HTMLInputElement>(".bot-form input")?.focus({ preventScroll: true }); }}><Bot/> Consultar a CECU-Bot</Button><Button size="lg" variant="outline" onClick={()=>document.getElementById("telemetria")?.scrollIntoView({behavior:"smooth"})}><Activity/> Dashboard en vivo</Button></div>
-    <div className="hero-links"><a href={POSTER_PDF} download="Poster_ESIS_2026.pdf"><FileDown/> Póster ESIS 2026</a><a href={WRITTEN_WORK_PDF} download="Trabajo_Escrito_ESIS_2026.pdf"><FileText/> Trabajo Escrito ESIS 2026 PDF</a><a href={MODEL_3D_URL} target="_blank" rel="noopener noreferrer"><Box/> Simulación Modelado 3D</a><button onClick={()=>document.getElementById("educacion")?.scrollIntoView({behavior:"smooth"})}><GraduationCap/> Ver resumen extenso</button></div>
-    <div className="institution-row"><MiniLogo label="UCC"/><MiniLogo label="INDESCO"/><MiniLogo label="OPENIN"/><MiniLogo label="ESIS 2026"/></div>
+    <div className="hero-actions hero-cta"><Button size="lg" className="cta-primary" onClick={()=>document.getElementById("prototipo")?.scrollIntoView({behavior:"smooth"})}><Box/> Explorar prototipo 3D</Button><Button size="lg" variant="outline" className="cta-glass" onClick={() => { document.getElementById("bot-guia")?.scrollIntoView({ behavior: "smooth" }); document.querySelector<HTMLInputElement>(".bot-form input")?.focus({ preventScroll: true }); }}><Bot/> Consultar a CECU-Bot</Button></div>
+    <div className="resource-dock"><a className="resource-pill" href={POSTER_PDF} download="Poster_ESIS_2026.pdf"><FileDown/> Póster ESIS 2026</a><a className="resource-pill" href={WRITTEN_WORK_PDF} download="Documento_PDF_ESIS_2026.pdf"><FileText/> Documento PDF ESIS 2026</a><a className="resource-pill" href={MODEL_3D_URL} target="_blank" rel="noopener noreferrer"><Box/> Simulación Modelado 3D</a><span className="resource-texts"><button type="button" onClick={()=>document.getElementById("telemetria")?.scrollIntoView({behavior:"smooth"})}>Dashboard en vivo <ChevronRight/></button><button type="button" onClick={()=>document.getElementById("educacion")?.scrollIntoView({behavior:"smooth"})}>Ver resumen extenso <ChevronRight/></button></span></div>
+    <div className="institution-pills"><MiniLogo label="UCC"/><MiniLogo label="INDESCO"/><MiniLogo label="OPENIN"/><MiniLogo label="ESIS 2026"/></div>
   </div><div id="prototipo" className="hero-model"><Cabinet active={active} setActive={setActive}/><div className="hotspot-card"><span>{String(active+1).padStart(2,"0")}</span><div><small>COMPONENTE TÉCNICO</small><h3>{activeHotspot[0]}</h3><p>{activeHotspot[1]}</p></div></div></div></div>
   <div className="congress-strip"><span>VI ENCUENTRO ESIS 2026</span><b>Sostenibilidad Ambiental</b><i/> <b>Desarrollo Tecnológico</b><span>Bogotá · Colombia</span></div></section>;
 }

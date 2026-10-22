@@ -14,6 +14,7 @@ export function TeamAndAcknowledgements() {
       </article>)}
     </div>
 
+    <div className="ack-pair">
     <blockquote className="dedication-card">
       <div className="ack-title"><Heart/> <span>Dedicatoria</span></div>
       <Quote className="quote-icon"/>
@@ -26,6 +27,7 @@ export function TeamAndAcknowledgements() {
         <div><h3>Pablo Elías Velásquez Perilla</h3><p>Líder del Semillero de Investigación OPENIN</p><p>Docente e Investigador · Universidad Cooperativa de Colombia (Campus Bogotá)</p></div>
       </div>
       <p className="mentor-msg">"Expresamos nuestra profunda gratitud al Semillero de Investigación OPENIN de la Universidad Cooperativa de Colombia (Campus Bogotá) por brindarnos el espacio ideal para crecer académica, científica y profesionalmente. De manera muy especial, reconocemos y agradecemos a nuestro docente líder, Pablo Elías Velásquez Perilla, por su valiosa guía, mentoría incondicional y acompañamiento en cada una de las decisiones tomadas durante este proceso. Gracias, profesor, por permitirnos ser parte de este semillero donde hemos crecido tanto profesional como personalmente, y por guiarnos, aconsejarnos y apoyarnos no solo en las decisiones académicas, sino también en nuestro desarrollo de vida dentro de la investigación."</p>
+    </div>
     </div>
   </div></section>;
 }
