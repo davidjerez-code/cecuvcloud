@@ -54,7 +54,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { kineticConcentration, operatingOutputs } from "@/lib/cecuv-simulation";
 
 import { materials, prototypeCost, savingsLabel, formatCop } from "@/lib/cecuv-budget";
-import { posterUrl, writtenWorkUrl, platformUrl, model3dUrl } from "@/lib/cecuv-resources";
+import { posterUrl, writtenWorkUrl, publicPlatformUrl, model3dUrl } from "@/lib/cecuv-resources";
 import { initialTelemetryState, telemetryReducer, telemetryCsv } from "@/lib/cecuv-telemetry";
 import { buildSimulationPdf, downloadBlob } from "@/lib/cecuv-exports";
 
@@ -155,23 +155,18 @@ function SectionHeading({ code, title, text }: { code: string; title: string; te
 }
 
 function QrPattern() {
-  const [url, setUrl] = useState("");
-  useEffect(() => {
-    setUrl(platformUrl(window.location.origin));
-  }, []);
-  if (!url) return <p role="status">Preparando código QR…</p>;
   return (
     <>
       <div className="platform-qr">
         <QRCodeSVG
-          value={url}
+          value={publicPlatformUrl}
           size={220}
           marginSize={4}
           level="M"
           title="Código QR de CECUV-Cloud"
         />
       </div>
-      <code>{url}</code>
+      <code>{publicPlatformUrl}</code>
     </>
   );
 }

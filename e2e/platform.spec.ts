@@ -35,9 +35,12 @@ test("idioma, temas, recursos originales y presupuesto coherente", async ({ page
   expect(total).toBe(1844000);
 });
 
-test("QR corresponde al origen de esta vista previa", async ({ page }) => {
+test("QR y metadatos conservan la URL pública incluso desde otro origen", async ({ page }) => {
+  const canonicalUrl = "https://cecuvcloud.vercel.app/";
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", canonicalUrl);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", canonicalUrl);
   await page.getByRole("button", { name: "Desplegar QR", exact: true }).click();
-  await expect(page.getByRole("dialog").locator("code")).toHaveText(new URL(page.url()).origin);
+  await expect(page.getByRole("dialog").locator("code")).toHaveText(canonicalUrl);
   await expect(page.getByRole("dialog").locator(".platform-qr svg")).toBeVisible();
 });
 

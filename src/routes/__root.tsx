@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { publicPlatformUrl } from "../lib/cecuv-resources";
 
 function NotFoundComponent() {
   return (
@@ -86,9 +87,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Laboratorio abierto de fotocatálisis, simulación y telemetría IoT.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: publicPlatformUrl },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      { rel: "canonical", href: publicPlatformUrl },
       {
         rel: "stylesheet",
         href: appCss,

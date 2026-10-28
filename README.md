@@ -36,19 +36,35 @@ Si se dispone de Chromium del sistema, se puede establecer `PLAYWRIGHT_CHROMIUM_
 
 El flujo `.github/workflows/quality.yml` ejecuta instalación limpia, lint, tipos, pruebas, auditoría, compilación para Vercel y navegador. No contiene secretos ni despliega a producción.
 
-## Vista previa en Vercel
+## URL permanente y publicación en Vercel
+
+La dirección pública es **https://cecuvcloud.vercel.app/**. El QR, la URL canónica y `og:url` comparten este destino, incluso al probar la aplicación desde localhost o una vista previa.
+
+El proyecto es `cecuvcloud-codex` (`prj_uYidOtiyRXOGGRFPXpuLwmib68mZ`) dentro del equipo **SaraQ**, scope `sara-q` (`team_Pntn14WpvRQxYnS604PXVfO2`). La cuenta `saraq328-lab` no es el scope del equipo. Conservar este proyecto y su dominio para las siguientes versiones.
 
 Stack: React 19, TypeScript, TanStack Start/Router, Vite y Nitro. Se conserva `@lovable.dev/vite-tanstack-config`; no agregar una segunda instancia de sus plugins.
 
-`vercel.json` configura TanStack Start, `npm ci` y el build de Nitro para Vercel. La compilación local equivalente es:
+`vercel.json` configura TanStack Start, `npm ci`, las verificaciones de calidad y el build de Nitro para Vercel. La compilación local equivalente es:
 
 ```sh
-NITRO_PRESET=vercel npm run build
+npm run check && NITRO_PRESET=vercel npm run build
 ```
 
 La salida se genera en `.vercel/output`, incluyendo la función SSR y los estáticos. No configurar una SPA estática ni un fallback global a `index.html`.
 
-Se debe desplegar una **vista previa del commit de `codex/cecuvcloud-next`**, sin promoverlo a producción. No se requieren claves externas para el simulador o chatbot local. `.vercel/` y los archivos `.env` quedan excluidos de Git.
+Publicar únicamente commits verificados de `codex/cecuvcloud-next`, conservando `main` y `Dev`. Con Vercel CLI 65.5.0, desde esta rama limpia y sincronizada con GitHub:
+
+```sh
+vercel deploy --prod --skip-domain --yes --archive tgz --scope sara-q --project prj_uYidOtiyRXOGGRFPXpuLwmib68mZ
+# Validar la URL técnica del despliegue READY y después promover ese mismo build:
+vercel promote <url-del-despliegue-validado> --yes --scope sara-q
+```
+
+La promoción actualiza la versión servida en `https://cecuvcloud.vercel.app/`. Las URLs técnicas que genera Vercel permiten comprobar versiones; la dirección pública se mantiene. La asignación automática de dominios del proyecto debe permanecer habilitada.
+
+La sincronización automática por push depende de que **la aplicación Vercel de GitHub tenga acceso al repositorio `davidjerez-code/cecuvcloud`**. La integración actual de Sara solo enumera el namespace `saraq328-lab` y no encuentra este repositorio. Hasta completar esa autorización y conectar el repositorio al proyecto existente con rama de producción `codex/cecuvcloud-next`, los pushes ejecutan el flujo de calidad de GitHub, pero la publicación se hace mediante el comando anterior. No crear otro proyecto ni cambiar la rama predeterminada del repositorio.
+
+No se requieren claves externas para el simulador o chatbot local. `.vercel/` y los archivos `.env` quedan excluidos de Git.
 
 ## Funciones y límites
 
@@ -59,7 +75,7 @@ Se debe desplegar una **vista previa del commit de `codex/cecuvcloud-next`**, si
 - Las fórmulas siguen en `src/lib/cecuv-simulation.ts`. El estimador educativo permanece separado de los controles operativos.
 - CECUV-Bot consulta una base de conocimiento local, sin llamar a un proveedor externo de modelos.
 - Costos, total y ahorro provienen de `src/lib/cecuv-budget.ts`, compartido con el chatbot.
-- El QR usa el origen de la página abierta, incluyendo cada vista previa.
+- El QR comparte siempre `https://cecuvcloud.vercel.app/`.
 - Las fotografías originales se sirven desde `public/team`. John conserva sus iniciales porque no se proporcionó fotografía.
 - El póster abre la [vista pública de Canva](https://www.canva.com/design/DAGFgwo55X4/yyUm1nnZ6K4hQICGAQuEpA/view). El trabajo escrito está disponible como PDF local. No se presenta una página de Canva como una descarga PDF.
 
