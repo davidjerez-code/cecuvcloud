@@ -6,3 +6,11 @@ pnpm-lock.yaml
 package-lock.json
 bun.lock
 routeTree.gen.ts
+.vercel
+.tanstack
+.nitro
+playwright-report
+test-results
+.lovable
+AGENTS.md
+src/routes/README.md
