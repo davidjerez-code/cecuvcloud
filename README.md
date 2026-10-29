@@ -1,46 +1,96 @@
-# CECUV-Cloud: Your IoT Science Hub
+# CECUVCloud
 
-Actúa como un Desarrollador Full-Stack Senior y Arquitecto de Software Experto en UX/UI Industrial. Tu objetivo es desarrollar el código frontend completo, funcional e integrado (HTML5 semántico, CSS3 avanzado y Vanilla JavaScript) para una plataforma web científica, educativa y de monitoreo IoT de nivel profesional (Industria 4.0) denominada CECUV-Cloud.
+Plataforma educativa del Semillero OPENIN — Universidad Cooperativa de Colombia. Integra un prototipo visual de cabina UV, simulación fotocatalítica, telemetría simulada, CECUV-Bot, presupuesto y reportes de sesión.
 
-El código debe ser totalmente responsive, optimizado, con animaciones fluidas (CSS transitions/keyframes) y un diseño minimalista de corte industrial y tecnológico. No utilices frameworks pesados (como React o Angular); construye la arquitectura con Vanilla JS, CSS3 puro (o Tailwind CSS mediante CDN) y librerías livianas como Chart.js (para gráficos en tiempo real) y html2pdf.js (para la generación y descarga de certificados).
+## Desarrollo aislado
 
-A continuación, se detallan las especificaciones técnicas, la arquitectura de componentes y los requisitos de interactividad que debes ejecutar al pie de la letra:
+El desarrollo de CODEX se realiza en `codex/cecuvcloud-next`. Las ramas `main` y `Dev` se conservan. No hacer push forzado ni reescribir historia publicada: el proyecto original está conectado a Lovable.
 
-1. REQUISITOS DE DISEÑO E INTERFAZ (UI/UX)
+## Instalación reproducible
 
-Modo Claro / Modo Oscuro (Toggle obligatorio): El sistema debe iniciar en Modo Claro (fondo #F8FAFC, texto oscuro) para los módulos educativos, pero debe incluir un botón en el menú superior para cambiar al Modo Oscuro/Laboratorio (fondo #0F172A, tarjetas oscuras con bordes sutiles).
-
-Paleta de Colores (Aplica resplandores/sombras en modo oscuro):
-
-Acento Tecnológico / Neón: #00E5FF (Radiación UV)
-
-Éxito / Sostenibilidad: #10B981 (Verde Esmeralda)
-
-Alerta / Peligro: #EF4444 (Rojo Alerta)
-
-Tipografía: Usa fuentes de Google Fonts (ej. 'Inter' o 'Roboto' para lectura, y 'Space Grotesk' o estilo monospace para los indicadores de datos IoT).
-
-Identidad de la PlataformaNombre Principal: CECUV-CloudDesagregación Técnica: Cabina Experimental de Control UV — Sistema Abierto de Monitorización IoT, Simulación y Gestión FotocatalíticaEslogan: "Digitalización IoT al servicio de la sostenibilidad ambiental y la descontaminación del agua."Eje Temático del Congreso: Sostenibilidad Ambiental y Desarrollo Tecnológico  Barra de Navegación (Header Interactivo)Logos Institucionales: Universidad Cooperativa de Colombia (UCC), Instituto INDESCO, Semillero OPENIN y VI Encuentro ESIS 2026.  Menú Interactivo: Inicio | Prototipo 3D | Módulo Educativo | Dashboard IoT | BOM & Viabilidad | ReconocimientosControles Rápidos (Header Tools): Botón Switch: [ Modo Claro / Modo Oscuro ] para adaptar la interfaz según la luz del entorno. Ícono QR: Botón [ Desplegar QR ] que genera una ventana emergente para que el jurado escanee la URL desde su teléfono. Sección 1: Inicio / Hero Section & Render 3D Interactivo1. Encabezado de ImpactoTítulo: CECUV-CloudSubtítulo: Cabina Experimental de Control UVEslogan: "Digitalización IoT al servicio de la sostenibilidad ambiental y la descontaminación del agua."Botones de Acción (CTA):[ Explorar Prototipo 3D ][ Ver Dashboard en Vivo ][  Descargar Póster ESIS 2026 (PDF) ]  [ 📖 Ver Resumen Extenso ]2. Modelo 3D Interactivo con HotspotsRender de la cabina en vista isométrica con tapa abatible abierta y puntos de interacción numerados:  Chasis Principal: Madera Triplex Marino (15 mm), resistente a humedad y aislante térmico/radiativo.  Revestimiento Optimizador: Película de Mylar aluminizado de alta reflexividad UV para distribución homogénea.  Módulo de Irradiación UV: Lámparas y LED UV-A (365 nm) con intensidad regulable por modulación PWM.  Plataforma de Trabajo: Bandeja en acero inoxidable AISI 304 con agitación magnética multipunto integrada para evitar sedimentación del TiO2.  Ventana de Inspección: Vidrio templado con película polarizada y filtro UV para supervisión ocular segura.  Mecanismo Ergonométrico: Pistones neumáticos para la elevación asistida de la tapa abatible.  Control Térmico: Extractores de aire (fan coolers) equipados con trampas de luz anti-fuga UV.  Módulo IoT y Seguridad: Microcontrolador (Arduino/ESP32), sensores de telemetría y microinterruptor Interlock Switch de apague automático al abrir la tapa.   Sección 2: Módulo Educativo & Asistente IA CientíficoBloque 1: Contexto de Investigación & CECUV-BotProblemática y Contexto: Tarjetas dinámicas sobre la toxicidad del Cromo Hexavalente Cr VI en efluentes industriales y la urgencia de Procesos de Oxidación Avanzada (PAOs).  Objetivo y Enfoque de Ingeniería: Estandarización de ensayos, parametrización de variables y eliminación de ruido experimental.  Asistente IA Científico ("CECUV-Bot"): Agente conversacional integrado para consulta del jurado.Sugerencias Rápidas:[ ¿Qué es el Cromo Hexavalente y por qué es peligroso? ]  [ ¿Cómo actúa el Dióxido de Titanio con la luz UV-A? ]  [ ¿Cuál es la ventaja económica de la CECUV frente a un fotorreactor comercial? ]  Bloque 2: Simulador Educativo de Diseño de Experimentos (DoE)Deslizadores de Control:Concentración de TiO2 (0.5 – 2.0 g/L).  Tiempo de exposición (0 – 120 min).  Potencia radiativa LED (10% – 100%).  Gráfica Dinámica: Proyección en tiempo real de la curva cinética de remoción y eficiencia teórica calculada.  Sección 3: Dashboard IoT en Vivo (Telemetría & Protocolo de Seguridad)1. Panel de Alertas y Protocolos de Bioseguridad en Tiempo RealBanner de Estado General:[ SISTEMA SEGURO - OPERACIÓN NORMAL ] (Verde)[  ALERTA DE SEGURIDAD: TAPA ABIERTA - RADIACIÓN UV INTERRUMPIDA AUTOMÁTICAMENTE ] (Rojo parpadeante al activar Interlock).  2. Tarjetas de Lectura en Tiempo Real (KPI Cards) Temperatura Interna (°C): Monitoreo térmico continuo con alerta si supera los 35 °C.  Humedad Relativa (%): Porcentaje de humedad en la cámara.   Intensidad UV (mW/cm²): Registro del flujo radiativo emitido por los LEDs.   Cronómetro de Ensayo (min): Tiempo de irradiación activo con alerta sonora/visual de fin de ciclo.   Estado de Agitación Magnética: Velocidad (RPM) y estado activo/inactivo.   Seguridad Interlock: Estado del sensor (CERRADA - Luz Activa / ABIERTA - Sistema Apagado).  3. Gráfico de Estabilidad Térmica y RadiativaRegistro gráfico en tiempo real de temperatura e intensidad UV para verificación de estabilidad del sistema.4. Centro de Exportación de Datos y Reportes de CalidadBotón 1: [ Descargar Telemetría Cruda (.CSV) ] (Para Minitab, R o Excel).  Botón 2: [  Generar Reporte Oficial de Ensayo en PDF ] (Crea un certificado automático con membretes institucionales, datos del operador, parámetros DoE y gráfica del ensayo).   Sección 4A: Viabilidad Económica y Lista de Materiales (BOM)Análisis de Viabilidad Económica: Tabla comparativa que demuestra una reducción del 60% al 75% en costos de fabricación en comparación con fotorreactores comerciales de laboratorio importados.  Lista de Materiales (BOM Interactivo): Desglose detallado de materiales estructurales, eléctricos, ópticos y microelectrónicos.   Sección 4B: Equipo Investigador, Dedicatoria y Reconocimientos1. Equipo InvestigadorJohn Alejandro Almanza ValderramaEstudiante de Ingeniería Industrial | Universidad Cooperativa de Colombia (Campus Bogotá) | Semillero OPENIN  Andrés Felipe Leguizamón RodríguezEstudiante de Ingeniería Industrial | Universidad Cooperativa de Colombia (Campus Bogotá) | Semillero OPENIN  David Stiven Jerez DíazEstudiante de Ingeniería Industrial | Universidad Cooperativa de Colombia (Campus Bogotá) | Semillero OPENIN  Sara Valentina Quintana LópezEstudiante de Ingeniería de Sistemas | Universidad Cooperativa de Colombia (Campus Bogotá) | Semillero OPENIN  2. Dedicatoria y Agradecimiento Familiar"Este proyecto se consolida, en primer lugar, gracias a Dios por concedernos la sabiduría, la salud y la perseverancia en cada etapa de nuestra formación. Dedicamos de manera muy especial este logro a nuestras familias y a nuestros padres, quienes constituyen el motor principal de nuestras vidas, el motivo para seguir luchando día a día y la inspiración constante para alcanzar el éxito en cada uno de nuestros proyectos académicos y personales. Asimismo, dedicamos este nuevo triunfo con profundo amor y respeto a aquellos familiares que ya no están físicamente con nosotros, pero que desde el cielo nos acompañan; es gracias a su recuerdo, su fuerza y su bendición que hemos logrado llegar a este punto en nuestras vidas."3. Reconocimiento al Liderazgo Docente y Semillero OPENINPerfil del Docente Líder:Pablo Elías Velásquez PerillaLíder del Semillero de Investigación OPENIN | Docente e Investigador | Universidad Cooperativa de Colombia (Campus Bogotá)  Mensaje de Agradecimiento:"Expresamos nuestra profunda gratitud al Semillero de Investigación OPENIN de la Universidad Cooperativa de Colombia (Campus Bogotá) por brindarnos el espacio ideal para crecer académica, científica y profesionalmente. De manera muy especial, reconocemos y agradecemos a nuestro docente líder, Pablo Elías Velásquez Perilla, por su valiosa guía, mentoría incondicional y acompañamiento en cada una de las decisiones tomadas durante este proceso. Gracias, profesor, por permitirnos ser parte de este semillero donde hemos crecido tanto profesional como personalmente, y por guiarnos, aconsejarnos y apoyarnos no solo en las decisiones académicas, sino también en nuestro desarrollo de vida dentro de la investigación."
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://cecuvcloud.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/ab81c9ba-7a71-4b44-9c59-679ee8e9992c).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitLab and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requisitos: **Node.js 24.x y npm 11**. El gestor de referencia es npm y el archivo de bloqueo es `package-lock.json`.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm ci
 npm run dev
 ```
+
+## Verificaciones
+
+```sh
+npm run check        # ESLint, TypeScript y pruebas de lógica
+npm audit           # Auditoría de dependencias
+npm run build       # Compilación del destino detectado por Nitro
+npm run format:check
+npx playwright install chromium
+npm run test:e2e     # Navegador en escritorio y móvil
+```
+
+Playwright inicia un servidor local. Para validar una vista previa publicada:
+
+```sh
+BASE_URL=https://direccion-de-la-vista-previa.vercel.app npm run test:e2e
+```
+
+Si se dispone de Chromium del sistema, se puede establecer `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`. Una vista previa protegida debe probarse mediante los mecanismos de acceso autorizados de Vercel, sin cambiar su audiencia.
+
+El flujo `.github/workflows/quality.yml` ejecuta instalación limpia, lint, tipos, pruebas, auditoría, compilación para Vercel y navegador. No contiene secretos ni despliega a producción.
+
+## URL permanente y publicación en Vercel
+
+La dirección pública es **https://cecuvcloud.vercel.app/**. El QR, la URL canónica y `og:url` comparten este destino, incluso al probar la aplicación desde localhost o una vista previa.
+
+El proyecto es `cecuvcloud-codex` (`prj_uYidOtiyRXOGGRFPXpuLwmib68mZ`) dentro del equipo **SaraQ**, scope `sara-q` (`team_Pntn14WpvRQxYnS604PXVfO2`). La cuenta `saraq328-lab` no es el scope del equipo. Conservar este proyecto y su dominio para las siguientes versiones.
+
+Stack: React 19, TypeScript, TanStack Start/Router, Vite y Nitro. Se conserva `@lovable.dev/vite-tanstack-config`; no agregar una segunda instancia de sus plugins.
+
+`vercel.json` configura TanStack Start, `npm ci`, las verificaciones de calidad y el build de Nitro para Vercel. La compilación local equivalente es:
+
+```sh
+npm run check && NITRO_PRESET=vercel npm run build
+```
+
+La salida se genera en `.vercel/output`, incluyendo la función SSR y los estáticos. No configurar una SPA estática ni un fallback global a `index.html`.
+
+Publicar únicamente commits verificados de `codex/cecuvcloud-next`, conservando `main` y `Dev`. Con Vercel CLI 65.5.0, desde esta rama limpia y sincronizada con GitHub:
+
+```sh
+vercel deploy --prod --skip-domain --yes --archive tgz --scope sara-q --project prj_uYidOtiyRXOGGRFPXpuLwmib68mZ
+# Validar la URL técnica del despliegue READY y después promover ese mismo build:
+vercel promote <url-del-despliegue-validado> --yes --scope sara-q
+```
+
+La promoción actualiza la versión servida en `https://cecuvcloud.vercel.app/`. Las URLs técnicas que genera Vercel permiten comprobar versiones; la dirección pública se mantiene. La asignación automática de dominios del proyecto debe permanecer habilitada.
+
+La sincronización automática por push depende de que **la aplicación Vercel de GitHub tenga acceso al repositorio `davidjerez-code/cecuvcloud`**. La integración actual de Sara solo enumera el namespace `saraq328-lab` y no encuentra este repositorio. Hasta completar esa autorización y conectar el repositorio al proyecto existente con rama de producción `codex/cecuvcloud-next`, los pushes ejecutan el flujo de calidad de GitHub, pero la publicación se hace mediante el comando anterior. No crear otro proyecto ni cambiar la rama predeterminada del repositorio.
+
+No se requieren claves externas para el simulador o chatbot local. `.vercel/` y los archivos `.env` quedan excluidos de Git.
+
+## Funciones y límites
+
+- El interlock simulado apaga UV y agitación, detiene el cronómetro y bloquea el inicio con puerta abierta. Cerrar la puerta requiere un inicio manual.
+- Gráfica, CSV y PDF utilizan las mismas muestras. Los eventos agregan registros; no reescriben la historia.
+- Cada carga genera un identificador de sesión y conserva como máximo 3.600 muestras en memoria. **Descargar los datos antes de recargar o cerrar:** no hay almacenamiento permanente ni conexión a sensores físicos.
+- El PDF incluye operador opcional, fecha, identificador, condiciones, escenario DoE de referencia y gráfico. Los datos son simulados y no constituyen una certificación de resultados experimentales.
+- Las fórmulas siguen en `src/lib/cecuv-simulation.ts`. El estimador educativo permanece separado de los controles operativos.
+- CECUV-Bot consulta una base de conocimiento local, sin llamar a un proveedor externo de modelos.
+- Costos, total y ahorro provienen de `src/lib/cecuv-budget.ts`, compartido con el chatbot.
+- El QR comparte siempre `https://cecuvcloud.vercel.app/`.
+- Las fotografías originales se sirven desde `public/team`. John conserva sus iniciales porque no se proporcionó fotografía.
+- El póster abre la [vista pública de Canva](https://www.canva.com/design/DAGFgwo55X4/yyUm1nnZ6K4hQICGAQuEpA/view). El trabajo escrito está disponible como PDF local. No se presenta una página de Canva como una descarga PDF.
+
+## Estructura principal
+
+| Ruta                              | Responsabilidad                                           |
+| --------------------------------- | --------------------------------------------------------- |
+| `src/routes`                      | Rutas y límites de error TanStack                         |
+| `src/components/cecuv-cloud.tsx`  | Composición de la plataforma                              |
+| `src/components/CecuvChatbot.tsx` | Interfaz de CECUV-Bot                                     |
+| `src/lib/cecuv-simulation.ts`     | Cinética y salidas seguras                                |
+| `src/lib/cecuv-telemetry.ts`      | Registro inmutable y CSV                                  |
+| `src/lib/cecuv-exports.ts`        | Descargas y reporte PDF                                   |
+| `src/lib/cecuv-budget.ts`         | Partidas, total y ahorro                                  |
+| `src/lib/cecuv-team.ts`           | Identidades compartidas del equipo                        |
+| `e2e`                             | Pruebas de navegación, seguridad simulada y exportaciones |
+
+La disponibilidad y los permisos de los recursos de Canva y Onshape se administran en esos servicios.
